@@ -10,6 +10,7 @@ private:
 public:
 	GameTimer();
 	~GameTimer();
+
 public:
 	void Init();
 	void Update();

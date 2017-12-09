@@ -1,5 +1,4 @@
 #include <windows.h>
-
 #include "GameTimer.h"
 
 GameTimer::GameTimer()
@@ -14,6 +13,7 @@ GameTimer::~GameTimer()
 {
 
 }
+
 void GameTimer::Init()
 {
 	__int64 currentCounter;
@@ -22,6 +22,7 @@ void GameTimer::Init()
 	_prevCounter = currentCounter;
 	_deltaTime = 0.0;
 }
+
 void GameTimer::Update()
 {
 	__int64 currentCounter;
@@ -33,6 +34,7 @@ void GameTimer::Update()
 	_deltaTime = (currentCounter - _prevCounter) * _secondsPerCount;
 	_prevCounter = currentCounter;
 }
+
 double GameTimer::GetDeltaTime()
 {
 	return _deltaTime;

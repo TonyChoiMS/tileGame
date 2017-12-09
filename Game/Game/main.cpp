@@ -186,9 +186,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 	}
 	// https://opengameart.org/
 	// 이미지 파일에서 텍스쳐 로드
-	LPCWSTR filePath = L"../Resources/images/character_sprite.png";
+	// 이동, 회전, 스케일 행렬을 사용
 	Sprite* testSprite = new Sprite(device3d, spriteDX);
-	testSprite->Init(filePath);
+	testSprite->Init(L"character_sprite.png", L"TestScript.json");
 
 	// FPS 결정 ( 60 fps )
 	float frameTime = 1.0f / 60.0f;

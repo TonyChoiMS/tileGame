@@ -11,6 +11,7 @@ Updating....
 
  - Window API
  - Direct X SDK
+ - Component System
 
 ### Using Algorhythm
  -  A*(star) Algorhythm (Comming Soon...)

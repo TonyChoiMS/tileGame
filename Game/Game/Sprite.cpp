@@ -43,12 +43,12 @@ void Sprite::Init(std::wstring textureFilename, std::wstring scriptFilename)
 		//std::wstring scriptFileName = L"TestScript.json";
 
 		std::vector<std::string> recordList = ResourceManager::GetInstance()->FindScript(scriptFilename);
-		for (int i = 0; i < recordList.size(); i++) 
+		for (int i = 0; i < recordList.size(); i++)
 		{
 			Json::Value root;
 			Json::Reader reader;
 			bool isSuccess = reader.parse(recordList[i], root);
-			if(isSuccess)
+			if (isSuccess)
 			{
 				std::string textureFilename = root["texture"].asString();
 				int x = root["x"].asInt();
@@ -92,7 +92,7 @@ void Sprite::Init(std::wstring textureFilename, std::wstring scriptFilename)
 	//{
 	//	return;
 	//}
-	
+
 	//{
 	//	Frame* frame = new Frame();
 	//	frame->Init(_spriteDX, _texture, 32, 0, 32, 32, 0.2f);		// Params : ID3DXSprite*, IDirect3DTexture9*, x, y, width, height 
@@ -110,6 +110,20 @@ void Sprite::Init(std::wstring textureFilename, std::wstring scriptFilename)
 	//}
 }
 
+void Sprite::Init(std::wstring textureFilename, int x, int y, int width, int height, float frameTime)
+{
+	// 이미지 파일에서 텍스쳐 로드
+	_texture = ResourceManager::GetInstance()->FindTexture(textureFilename, _device3d);
+
+	// json 스크립트 파싱
+	Frame* frame = new Frame();
+	frame->Init(_spriteDX, _texture, x, y, width, height, frameTime);		// Params : ID3DXSprite*, IDirect3DTexture9*, x, y, width, height 
+	_frameList.push_back(frame);
+
+	_currentFrame = 0;
+	_frameDuration = 0.0f;
+}
+
 void Sprite::Update(float deltaTime)
 {
 	_frameDuration += deltaTime;
@@ -125,7 +139,7 @@ void Sprite::Render()
 	if (_currentFrame < _frameList.size()) {
 		_frameList[_currentFrame]->SetPosition(_x, _y);
 		_frameList[_currentFrame]->Render();
-	}		
+	}
 }
 
 void Sprite::Release()

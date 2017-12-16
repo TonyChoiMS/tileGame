@@ -2,16 +2,18 @@
 
 #include <string>
 #include <d3dx9.h>
+#include <vector>
 #include "Sprite.h"
 
-#define mapWidth 64
-#define mapHeight 64
+#define mapWidth 16
+#define mapHeight 16
 
 class Sprite;
 
 class Map
 {
 private:
+	std::vector<Sprite*> _spriteList;
 	Sprite* _spriteArray[mapHeight][mapWidth];
 
 	int _height;
@@ -32,4 +34,14 @@ public:
 
 	void Release();
 	void Reset(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX);
+
+private:
+	int _startX;
+	int _startY;
+
+public:
+	void MoveLeft();
+	void MoveRight();
+	void MoveUp();
+	void MoveDown();
 };

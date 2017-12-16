@@ -1,12 +1,10 @@
 #include "Map.h"
 #include "GameSystem.h"
 
-extern int gStartX;
-extern int gStartY;
-
 Map::Map(std::wstring name)
 {
-
+	_startX = 0;
+	_startY = 0;
 }
 
 Map::~Map()
@@ -16,42 +14,49 @@ Map::~Map()
 
 void Map::Init(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX)
 {
+	_width = mapWidth;
+	_height = mapHeight;
 
-	_width = 128;
-	_height = 128;
+	// Sprite List 구성
+	{
+		int srcX = 0;
+		int srcY = 0;
+		int spriteSize = 32;
+		for (int y = 0; y < 16; y++)
+		{
+			for (int x = 0; x < 16; x++)
+			{
+				Sprite* sprite = new Sprite(device3d, spriteDX);
+				sprite->Init(L"MapSprite.png", srcX, srcY, spriteSize, spriteSize, 1.0f);
+				_spriteList.push_back(sprite);
+
+				srcX += spriteSize;
+			}
+			srcX = 0;
+			srcY += spriteSize;
+		}
+	}
 
 	// 타일맵 인덱스 구성
+	int index = 0;
 	int testTileMapIndex[mapHeight][mapWidth];
 	for (int y = 0; y < _height; y++)
 	{
 		for (int x = 0; x < _width; x++)
 		{
-			testTileMapIndex[y][x] = rand() % 4;
+			testTileMapIndex[y][x] = index;
+			index++;
 		}
 	}
 
-	// 타일맵 인덱스를 이용해서 스프라이트 리스트를 구성
+	// 타일맵 인덱스를 이용해서 맵 구성
 	for (int y = 0; y < _height; y++)
 	{
 		for (int x = 0; x < _width; x++)
 		{
 			int spriteIndex = testTileMapIndex[y][x];
-			Sprite* sprite = new Sprite(device3d, spriteDX);
-			switch (spriteIndex)
-			{
-			case 0:
-				sprite->Init(L"character_sprite.png", L"player_left.json");
-				break;
-			case 1:
-				sprite->Init(L"character_sprite.png", L"player_right.json");
-				break;
-			case 2:
-				sprite->Init(L"character_sprite.png", L"player_down.json");
-				break;
-			case 3:
-				sprite->Init(L"character_sprite.png", L"player_up.json");
-				break;
-			}
+//			Sprite* sprite = new Sprite(device3d, spriteDX);
+			Sprite* sprite = _spriteList[spriteIndex];			// 중요한 핵심부분
 			_spriteArray[y][x] = sprite;
 		}
 	}
@@ -86,14 +91,13 @@ void Map::Update(int deltaTime)
 			_spriteArray[y][x]->Update(deltaTime);
 		}
 	}
-
 }
 
 void Map::Render()
 {
 
-	int startTileX = gStartX;
-	int startTileY = gStartY;
+	int startTileX = _startX;
+	int startTileY = _startY;
 	int endTileX = startTileX + _renderWidth;
 	int endTileY = startTileY + _renderHeight;
 
@@ -121,11 +125,11 @@ void Map::Render()
 					_spriteArray[y][x]->SetPosition(posX, posY);
 					_spriteArray[y][x]->Render();
 				}
-				posX += tileSize;
+				posX += (tileSize+4);
 			}
 		}
 		posX = 0.0f;
-		posY += tileSize;
+		posY += (tileSize+4);
 	}
 
 }
@@ -153,5 +157,24 @@ void Map::Reset(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX)
 			_spriteArray[y][x]->Reset(device3d, spriteDX);
 		}
 	}
+}
 
+void Map::MoveLeft()
+{
+	_startX--;
+}
+
+void Map::MoveRight()
+{
+	_startX++;
+}
+
+void Map::MoveUp()
+{
+	_startY--;
+}
+
+void Map::MoveDown()
+{
+	_startY++;
 }

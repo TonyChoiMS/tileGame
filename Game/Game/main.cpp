@@ -4,11 +4,11 @@
 #include "GameTimer.h"
 #include "Sprite.h"
 #include "Map.h"
+#include "GameSystem.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-int gStartX = 0;
-int gStartY = 0;
+Map* gMap = 0;
 
 // windows는 H라는 형태를 붙는다 h는 (handle:핸들) id개념
 // HINSTANCE hInstance : 현재 응용프로그램 인스턴스 핸들 ,  현재 응용프로그램에 접속해서 관리 
@@ -189,8 +189,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 		return 0;
 	}
 
-	Map* map = new Map(L"Map");
-	map->Init(device3d, spriteDX);
+	GameSystem::GetInstance()->SetClientWidth(clientWidth);
+	GameSystem::GetInstance()->SetClientHeight(clientHeight);
+
+	gMap = new Map(L"Map");
+	gMap->Init(device3d, spriteDX);
 	
 	// https://opengameart.org/
 	// 이미지 파일에서 텍스쳐 로드
@@ -221,7 +224,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 			gameTimer.Update();
 			float deltaTime = gameTimer.GetDeltaTime();
 			// 없으면, game update
-			map->Update(deltaTime);
+			gMap->Update(deltaTime);
 			
 			//testSprite->Update(deltaTime);
 			frameDuration += deltaTime;
@@ -246,7 +249,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 							//float startX = 100.0f;
 							//float startY = 100.0f;
 						{
-							map->Render();
+							gMap->Render();
 							
 						}
 						spriteDX->End();
@@ -277,8 +280,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 							// 메모리 해제 후 재시동
 
 							//망가진 데이터 처리
-							//testSprite->Release();
-							map->Release();
+							gMap->Release();
 							
 
 							direct3d = Direct3DCreate9(D3D_SDK_VERSION);
@@ -297,7 +299,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 									hr = D3DXCreateSprite(device3d, &spriteDX);
 									if (SUCCEEDED(hr))
 									{
-										map->Reset(device3d, spriteDX);
+										gMap->Reset(device3d, spriteDX);
 										
 									}
 								}
@@ -313,9 +315,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 	}
 	// 프로그램이 끝나기 전에, 사용했던 자원을 해제한다.
 	//delete testSprite;
-	map->Deinit();
-	delete map;
-	map = NULL;
+	gMap->Deinit();
+	delete gMap;
+	gMap = NULL;
 	
 
 	ResourceManager::GetInstance()->RemoveAllTexture();
@@ -354,10 +356,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			DestroyWindow(hWnd);
 		}
 
-		if (VK_LEFT == wParam) gStartX--;
-		if (VK_RIGHT == wParam) gStartX++;
-		if (VK_UP == wParam) gStartY--;
-		if (VK_DOWN == wParam) gStartY++;
+		if (VK_LEFT == wParam) gMap->MoveLeft();
+		if (VK_RIGHT == wParam) gMap->MoveRight();
+		if (VK_UP == wParam) gMap->MoveUp();
+		if (VK_DOWN == wParam) gMap->MoveDown();
 
 		return 0;
 	case WM_DESTROY:

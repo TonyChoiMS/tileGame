@@ -41,8 +41,8 @@ void Frame::Render()
 	float rotate = 0.0f;
 
 	// 위치 결정
-	float x = 1280.0f / 2.0f - _width / 2.0f;
-	float y = 800.0f / 2.0f - _height / 2.0f;
+	float x = _x - _width / 2.0f;
+	float y = _y - _height / 2.0f;
 	D3DXVECTOR2 translate = D3DXVECTOR2(x, y);
 
 	D3DXMATRIX matrix;
@@ -71,4 +71,10 @@ void Frame::Reset(ID3DXSprite* spriteDX)
 {
 	_spriteDX = spriteDX;
 	//_textureDX = textureDX;
+}
+
+void Frame::SetPosition(float x, float y)
+{
+	_x = x;
+	_y = y;
 }

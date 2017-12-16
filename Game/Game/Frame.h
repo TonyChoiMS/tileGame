@@ -18,6 +18,9 @@ private:
 	float _width;
 	float _height;
 
+	float _x;
+	float _y;
+
 public:
 	Frame();
 	~Frame();
@@ -27,6 +30,8 @@ public:
 	void Release();
 	//void Reset(ID3DXSprite* spriteDX, IDirect3DTexture9* textureDX);
 	void Reset(ID3DXSprite* spriteDX);
+
+	void SetPosition(float x, float y);
 
 private:
 	float _frameTime;

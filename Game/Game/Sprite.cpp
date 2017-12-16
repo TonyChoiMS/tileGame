@@ -20,11 +20,11 @@ Sprite::~Sprite()
 		_textureDX->Release();
 		_textureDX = NULL;
 	}*/
-	if (NULL != _texture) {
+	/*if (NULL != _texture) {
 		_texture->Release();
 		delete _texture;
 		_texture = NULL;
-	}
+	}*/
 	for (int i = 0; i < _frameList.size(); i++)
 	{
 		delete _frameList[i];
@@ -63,6 +63,9 @@ void Sprite::Init(std::wstring textureFilename, std::wstring scriptFilename)
 			}
 		}
 	}
+
+	_currentFrame = 0;
+	_frameDuration = 0.0f;
 	//std::wstring.c_str() -> std::wstringÀ» LPCWSTR°ªÀ¸·Î ¹Ù²ãÁÜ
 	//HRESULT hr = D3DXGetImageInfoFromFile(filePath.c_str(), &_texInfo);
 	//if (FAILED(hr))
@@ -105,9 +108,6 @@ void Sprite::Init(std::wstring textureFilename, std::wstring scriptFilename)
 	//	frame->Init(_spriteDX, _texture, 64, 0, 32, 32, 0.2f);		// Params : ID3DXSprite*, IDirect3DTexture9*, x, y, width, height 
 	//	_frameList.push_back(frame);
 	//}
-	_currentFrame = 0;
-	_frameDuration = 0.0f;
-		
 }
 
 void Sprite::Update(float deltaTime)
@@ -123,6 +123,7 @@ void Sprite::Update(float deltaTime)
 void Sprite::Render()
 {
 	if (_currentFrame < _frameList.size()) {
+		_frameList[_currentFrame]->SetPosition(_x, _y);
 		_frameList[_currentFrame]->Render();
 	}		
 }
@@ -170,4 +171,9 @@ void Sprite::Reset(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX)
 	{
 		_frameList[i]->Reset(_spriteDX);
 	}
+}
+
+void Sprite::SetPosition(float x, float y) {
+	_x = x;
+	_y = y;
 }

@@ -26,6 +26,9 @@ private:
 	std::vector<Frame*> _frameList;
 	int _currentFrame;
 
+	float _x;
+	float _y;
+
 public:
 	Sprite(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX);
 	~Sprite();
@@ -37,6 +40,8 @@ public:
 	void Render();
 	void Release();
 	void Reset(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX);
+
+	void SetPosition(float x, float y);
 
 	//Animation
 private:

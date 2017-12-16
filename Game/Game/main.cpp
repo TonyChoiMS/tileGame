@@ -1,10 +1,13 @@
 #include <Windows.h>
 #include <d3dx9.h>
-
+#include "ResourceManager.h"
 #include "GameTimer.h"
 #include "Sprite.h"
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+int gStartX = 0;
+int gStartY = 0;
 
 // windows는 H라는 형태를 붙는다 h는 (handle:핸들) id개념
 // HINSTANCE hInstance : 현재 응용프로그램 인스턴스 핸들 ,  현재 응용프로그램에 접속해서 관리 
@@ -61,14 +64,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 
 	// 윈도우 스타일( 창모드와 풀스크린에서 옵션 값이 다름)
 	DWORD style = isWindow ? WS_OVERLAPPEDWINDOW : WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP;
-	//if (isWindow)
-	//{
-	//	style = WS_OVERLAPPEDWINDOW;					// 모든 창 옵션을 다 가져옴.
-	//}
-	//else
-	//{
-	//	style = WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP;
-	//}
+	if (isWindow)
+	{
+		style = WS_OVERLAPPEDWINDOW;					// 모든 창 옵션을 다 가져옴.
+	}
+	else
+	{
+		style = WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP;
+	}
 	// 윈도우 창을 생성하고 핸들을 얻음 (id)
 	HWND hWnd = CreateWindow(
 		// 문자열 앞의 L은 문자열을 유니코드로 변경해주는 키워드
@@ -184,11 +187,57 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 		MessageBox(0, L"Failed D3DXCreateSprite", L"Error", MB_OK);
 		return 0;
 	}
+
+	Map* map = new Map(L"Map");
+	map->Init();
+	const int mapWidth = 128;
+	const int mapHeight = 128;
+
+	// 타일맵 인덱스 구성
+	int testTileMapIndex[mapHeight][mapWidth];
+	for (int y = 0; y < mapHeight; y++)
+	{
+		for (int x = 0; x < mapWidth; x++)
+		{
+			testTileMapIndex[y][x] = rand() % 4;
+		}
+	}
+
+	// 타일맵 인덱스를 이용해서 스프라이트 리스트를 구성
+	Sprite* testTileMapSprite[mapHeight][mapWidth];
+	for (int y = 0; y < mapHeight; y++)
+	{
+		for (int x = 0; x < mapWidth; x++)
+		{
+			int spriteIndex = testTileMapIndex[y][x];
+			Sprite* sprite = new Sprite(device3d, spriteDX);
+			switch (spriteIndex)
+			{
+			case 0:
+				sprite->Init(L"character_sprite.png", L"player_left.json");
+				break;
+			case 1:
+				sprite->Init(L"character_sprite.png", L"player_right.json");
+				break;
+			case 2:
+				sprite->Init(L"character_sprite.png", L"player_down.json");
+				break;
+			case 3:
+				sprite->Init(L"character_sprite.png", L"player_up.json");
+				break;
+			}
+			testTileMapSprite[y][x] = sprite;
+		}
+	}
+
+	int tileSize = 32;
+	int renderMapWidth = clientWidth / tileSize + 1;
+	int renderMapHeight = clientHeight / tileSize + 1;
 	// https://opengameart.org/
 	// 이미지 파일에서 텍스쳐 로드
 	// 이동, 회전, 스케일 행렬을 사용
-	Sprite* testSprite = new Sprite(device3d, spriteDX);
-	testSprite->Init(L"character_sprite.png", L"TestScript.json");
+	//Sprite* testSprite = new Sprite(device3d, spriteDX);
+	//testSprite->Init(L"character_sprite.png", L"TestScript.json");
 
 	// FPS 결정 ( 60 fps )
 	float frameTime = 1.0f / 60.0f;
@@ -213,10 +262,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 			gameTimer.Update();
 			float deltaTime = gameTimer.GetDeltaTime();
 			// 없으면, game update
-
-			testSprite->Update(deltaTime);
+			for (int y = 0; y < mapHeight; y++)
+			{
+				for (int x = 0; x < mapWidth; x++)
+				{
+					testTileMapSprite[y][x]->Update(deltaTime);
+				}
+			}
+			//testSprite->Update(deltaTime);
 			frameDuration += deltaTime;
-
 			if (frameTime <= frameDuration)
 			{
 				frameDuration = 0;
@@ -229,12 +283,51 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 					{
 						// 그려야할 모든 이미지는 이 영역에서 출력(2D/3D 모두)
 						// 2D를 그릴 때는 따로 선언을 해줘야 가능
-						spriteDX->Begin(D3DXSPRITE_ALPHABLEND);				
+						spriteDX->Begin(D3DXSPRITE_ALPHABLEND);
 						// Color key는 지정된 값은 출력을 아예 안하는데 반해,
 						// Alphablend는 투명도. 알파값이 있으면 해당 알파값을 이용 (color key와 개념이 조금 다름)
-						{
+
 							// 2D는 이 영역에서 그려줌
-							testSprite->Render();
+							//testSprite->Render();
+							//float startX = 100.0f;
+							//float startY = 100.0f;
+						{
+
+							int startTileX = gStartX;
+							int startTileY = gStartY;
+							int endTileX = startTileX + renderMapWidth;
+							int endTileY = startTileY + renderMapHeight;
+
+							if (mapWidth < endTileX)
+							{
+								endTileX = mapWidth;
+							}
+							if (mapHeight < endTileY)
+							{
+								endTileY = mapHeight;
+							}
+
+							float posX = 0.0f;
+							float posY = 0.0f;
+							int tileSize = 32;
+
+							for (int y = startTileY; y < endTileY; y++)
+							{
+								if (0 <= y)
+								{
+									for (int x = startTileX; x < endTileX; x++)
+									{
+										if (0 <= x)
+										{
+											testTileMapSprite[y][x]->SetPosition(posX, posY);
+											testTileMapSprite[y][x]->Render();
+										}
+										posX += tileSize;
+									}
+								}
+								posX = 0.0f;
+								posY += tileSize;
+							}
 						}
 						spriteDX->End();
 					}
@@ -264,7 +357,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 							// 메모리 해제 후 재시동
 
 							//망가진 데이터 처리
-							testSprite->Release();
+							//testSprite->Release();
+							for (int y = 0; y < mapHeight; y++)
+							{
+								for (int x = 0; x < mapWidth; x++)
+								{
+									testTileMapSprite[y][x]->Release();
+								}
+							}
 
 							direct3d = Direct3DCreate9(D3D_SDK_VERSION);
 							if (NULL != direct3d)
@@ -280,9 +380,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 								if (SUCCEEDED(hr))
 								{
 									hr = D3DXCreateSprite(device3d, &spriteDX);
+									if (SUCCEEDED(hr))
+									{
+										for (int y = 0; y < mapHeight; y++)
+										{
+											for (int x = 0; x < mapWidth; x++)
+											{
+												testTileMapSprite[y][x]->Reset(device3d, spriteDX);
+											}
+										}
+									}
 								}
 							}
-							testSprite->Reset(device3d, spriteDX);
+							//testSprite->Reset(device3d, spriteDX);
 						}
 					}
 				}
@@ -292,7 +402,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 		}
 	}
 	// 프로그램이 끝나기 전에, 사용했던 자원을 해제한다.
-	delete testSprite;
+	//delete testSprite;
+	for (int y = 0; y < mapHeight; y++)
+	{
+		for (int x = 0; x < mapWidth; x++)
+		{
+			delete testTileMapSprite[y][x];
+		}
+	}
+
+	ResourceManager::GetInstance()->RemoveAllTexture();
 	if (spriteDX)
 	{
 		spriteDX->Release();
@@ -327,6 +446,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			DestroyWindow(hWnd);
 		}
+
+		if (VK_LEFT == wParam) gStartX--;
+		if (VK_RIGHT == wParam) gStartX++;
+		if (VK_UP == wParam) gStartY--;
+		if (VK_DOWN == wParam) gStartY++;
+
 		return 0;
 	case WM_DESTROY:
 		PostQuitMessage(0);

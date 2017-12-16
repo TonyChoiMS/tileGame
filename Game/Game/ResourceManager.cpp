@@ -45,10 +45,22 @@ Texture* ResourceManager::FindTexture(std::wstring fileName, LPDIRECT3DDEVICE9 d
 	return texture;
 }
 
+void ResourceManager::RemoveAllTexture()
+{
+	for (std::map<std::wstring, Texture*>::iterator it = _textureMap.begin();
+		it != _textureMap.end(); it++)
+	{
+		Texture* tex = it->second;
+		delete tex;
+	}
+	_textureMap.clear();
+}
+
 std::vector<std::string> ResourceManager::FindScript(std::wstring fileName)
 {
 	WCHAR filePath[256];
 	wsprintf(filePath, L"../Resources/Scripts/%s", fileName.c_str());
+
 	std::map<std::wstring, std::vector<std::string>>::iterator it = _scriptMap.find(filePath);
 	if (it != _scriptMap.end())
 	{

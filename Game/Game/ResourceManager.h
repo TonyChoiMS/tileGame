@@ -26,6 +26,7 @@ private:
 
 public:
 	Texture* FindTexture(std::wstring fileName, LPDIRECT3DDEVICE9 device3d);
+	void RemoveAllTexture();
 
 	// Script
 private:

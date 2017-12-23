@@ -48,6 +48,9 @@
     <ClCompile Include="GameSystem.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>소스 파일\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameTimer.h">
@@ -70,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="GameSystem.h">
       <Filter>소스 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>소스 파일\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

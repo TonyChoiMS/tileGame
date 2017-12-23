@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "Map.h"
 #include "GameSystem.h"
+#include "Character.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -194,6 +195,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 
 	gMap = new Map(L"Map");
 	gMap->Init(device3d, spriteDX);
+
+	// 1. 캐릭터 생성
+	Character* character = new Character(L"TestChar");
+	character->Init(device3d, spriteDX);
 	
 	// https://opengameart.org/
 	// 이미지 파일에서 텍스쳐 로드
@@ -225,6 +230,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 			float deltaTime = gameTimer.GetDeltaTime();
 			// 없으면, game update
 			gMap->Update(deltaTime);
+			// 캐릭터 업데이트
+			character->Update(deltaTime);
 			
 			//testSprite->Update(deltaTime);
 			frameDuration += deltaTime;
@@ -250,6 +257,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 							//float startY = 100.0f;
 						{
 							gMap->Render();
+							character->Render();
 							
 						}
 						spriteDX->End();
@@ -281,7 +289,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 
 							//망가진 데이터 처리
 							gMap->Release();
-							
+							character->Release();		// 캐릭터 릴리즈
 
 							direct3d = Direct3DCreate9(D3D_SDK_VERSION);
 							if (NULL != direct3d)
@@ -300,7 +308,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 									if (SUCCEEDED(hr))
 									{
 										gMap->Reset(device3d, spriteDX);
-										
+										character->Reset(device3d, spriteDX);
 									}
 								}
 							}
@@ -318,8 +326,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 	gMap->Deinit();
 	delete gMap;
 	gMap = NULL;
-	
 
+	character->Deinit();
+	delete character;
+	character = NULL;
+	
 	ResourceManager::GetInstance()->RemoveAllTexture();
 	if (spriteDX)
 	{

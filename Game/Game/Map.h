@@ -14,7 +14,9 @@ class Map
 {
 private:
 	std::vector<Sprite*> _spriteList;
-	Sprite* _spriteArray[mapHeight][mapWidth];
+	//Sprite* _spriteArray[mapHeight][mapWidth];
+
+	std::vector<std::vector<Sprite*>> _spriteArray;
 
 	int _height;
 	int _width;

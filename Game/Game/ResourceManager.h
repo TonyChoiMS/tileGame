@@ -25,7 +25,7 @@ private:
 	std::map<std::wstring, Texture*> _textureMap;
 
 public:
-	Texture* FindTexture(std::wstring fileName, LPDIRECT3DDEVICE9 device3d);
+	Texture* FindTexture(std::wstring fileName);
 	void RemoveAllTexture();
 
 	// Script

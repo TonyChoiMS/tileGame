@@ -1,5 +1,6 @@
 #include "Frame.h"
 #include "Texture.h"
+#include "GameSystem.h"
 
 Frame::Frame()
 {
@@ -11,10 +12,8 @@ Frame::~Frame()
 
 }
 
-void Frame::Init(ID3DXSprite* spriteDX, Texture* texture, int x, int y, int width, int height, float frameTime)
+void Frame::Init(Texture* texture, int x, int y, int width, int height, float frameTime)
 {
-	_spriteDX = spriteDX;
-	//_textureDX = textureDX;
 	_texture = texture;
 
 	// 화면에 출력될 이미지의 영역을 선택
@@ -56,9 +55,8 @@ void Frame::Render()
 		&translate				// 평행 이동 -> 위치가 결정
 	);
 
-	_spriteDX->SetTransform(&matrix);
-	//_spriteDX->Draw(_textureDX, &_textureRect, NULL, NULL, _textureColor);
-	_spriteDX->Draw(_texture->GetTextureDX(), &_textureRect, NULL, NULL, _textureColor);
+	GameSystem::GetInstance()->GetSpriteDX()->SetTransform(&matrix);
+	GameSystem::GetInstance()->GetSpriteDX()->Draw(_texture->GetTextureDX(), &_textureRect, NULL, NULL, _textureColor);
 }
 
 void Frame::Release()
@@ -66,11 +64,8 @@ void Frame::Release()
 
 }
 
-//void Frame::Reset(ID3DXSprite* spriteDX, IDirect3DTexture9* textureDX)
-void Frame::Reset(ID3DXSprite* spriteDX)
+void Frame::Reset()
 {
-	_spriteDX = spriteDX;
-	//_textureDX = textureDX;
 }
 
 void Frame::SetPosition(float x, float y)

@@ -22,7 +22,7 @@ ResourceManager::~ResourceManager()
 {
 }
 
-Texture* ResourceManager::FindTexture(std::wstring fileName, LPDIRECT3DDEVICE9 device3d)
+Texture* ResourceManager::FindTexture(std::wstring fileName)
 {
 	WCHAR filePath[256];
 	wsprintf(filePath, L"../Resources/images/%s", fileName.c_str());
@@ -36,7 +36,7 @@ Texture* ResourceManager::FindTexture(std::wstring fileName, LPDIRECT3DDEVICE9 d
 	}
 
 	// 없으면, 새로 생성하고
-	Texture* texture = new Texture(device3d, filePath);
+	Texture* texture = new Texture(filePath);
 
 	// 생성된걸, fileName 이름으로 등록
 	_textureMap[filePath] = texture;

@@ -14,7 +14,6 @@ class Map
 {
 private:
 	std::vector<Sprite*> _spriteList;
-	//Sprite* _spriteArray[mapHeight][mapWidth];
 
 	std::vector<std::vector<Sprite*>> _spriteArray;
 
@@ -28,14 +27,14 @@ public:
 	Map(std::wstring name);
 	~Map();
 
-	void Init(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX);
+	void Init();
 	void Deinit();
 	void Update(int deltaTime);
 	void Render();
 	
 
 	void Release();
-	void Reset(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX);
+	void Reset();
 
 private:
 	int _startX;

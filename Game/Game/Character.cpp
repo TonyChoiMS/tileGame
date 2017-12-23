@@ -3,7 +3,7 @@
 Character::Character(std::wstring name) 
 {
 	_sprite = NULL;
-	_x = _y = 0.0f;
+	_position.x = _position.y = 0.0f;
 }
 
 Character::~Character()
@@ -11,10 +11,10 @@ Character::~Character()
 
 }
 
-void Character::Init(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX)
+void Character::Init()
 {
 	// 화면에 그려질 스프라이트 생성
-	_sprite = new Sprite(device3d, spriteDX);
+	_sprite = new Sprite();
 	_sprite->Init(L"character_sprite.png", L"player_down.json");
 }
 
@@ -33,7 +33,7 @@ void Character::Update(float deltaTime)
 
 void Character::Render()
 {
-	_sprite->SetPosition(_x, _y);
+	_sprite->SetPosition(_position.x, _position.y);
 	_sprite->Render();
 }
 
@@ -42,7 +42,7 @@ void Character::Release()
 	_sprite->Release();
 }
 
-void Character::Reset(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX)
+void Character::Reset()
 {
-	_sprite->Reset(device3d, spriteDX);
+	_sprite->Reset();
 }

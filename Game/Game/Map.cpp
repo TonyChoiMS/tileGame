@@ -15,7 +15,7 @@ Map::~Map()
 
 }
 
-void Map::Init(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX)
+void Map::Init()
 {
 	_width = mapWidth;
 	_height = mapHeight;
@@ -29,7 +29,7 @@ void Map::Init(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX)
 		{
 			for (int x = 0; x < 16; x++)
 			{
-				Sprite* sprite = new Sprite(device3d, spriteDX);
+				Sprite* sprite = new Sprite();
 				sprite->Init(L"MapSprite.png", srcX, srcY, spriteSize, spriteSize, 1.0f);
 				_spriteList.push_back(sprite);
 
@@ -39,21 +39,6 @@ void Map::Init(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX)
 			srcY += spriteSize;
 		}
 	}
-
-	// 타일맵 인덱스 구성
-	
-	/*
-	int index = 0;
-	int testTileMapIndex[mapHeight][mapWidth];
-	for (int y = 0; y < _height; y++)
-	{
-		for (int x = 0; x < _width; x++)
-		{
-			testTileMapIndex[y][x] = index;
-			index++;
-		}
-	}
-	*/
 	// 타일맵 인덱스 구성 -> 스트립트를	바탕으로 스프라이트를 생성
 	_spriteArray.clear();			// 1. 스프라이트 배열을 초기화(비우기)
 	{
@@ -94,26 +79,8 @@ void Map::Init(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX)
 			line++;									// 다 읽으면 라인 증가
 		}
 	}
-	
-	// 타일맵 인덱스를 이용해서 맵 구성
-	/*
-	for (int y = 0; y < _height; y++)
-	{
-		std::vector<Sprite*> rowList;		// 2. 가로 배열 생성
-		for (int x = 0; x < _width; x++)
-		{
-			int spriteIndex = testTileMapIndex[y][x];
-//			Sprite* sprite = new Sprite(device3d, spriteDX);
-			Sprite* sprite = _spriteList[spriteIndex];			// 중요한 핵심부분	
-			//_spriteArray[y][x] = sprite;
-		}
-		_spriteArray.push_back(rowList);		// 4. 가로를 리스트에 넣어서 세로 완성
-	}
-	*/
 
 	int tileSize = 32;
-	//_renderWidth = clientWidth / tileSize + 1;
-	//_renderHeight = clientHeight / tileSize + 1;
 	_renderWidth = GameSystem::GetInstance()->GetClientWidth() / tileSize + 1;
 	_renderHeight = GameSystem::GetInstance()->GetClientHeight() / tileSize + 1;
 
@@ -121,13 +88,11 @@ void Map::Init(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX)
 void Map::Deinit()
 {
 
-	for (int y = 0; y < _height; y++)
+	for (int i = 0; i < _spriteList.size(); i++)
 	{
-		for (int x = 0; x < _width; x++)
-		{
-			delete _spriteArray[y][x];
-		}
+		delete _spriteList[i];
 	}
+	_spriteList.clear();
 
 }
 
@@ -196,14 +161,14 @@ void Map::Release()
 
 }
 
-void Map::Reset(LPDIRECT3DDEVICE9 device3d, ID3DXSprite* spriteDX)
+void Map::Reset()
 {
 
 	for (int y = 0; y < _height; y++)
 	{
 		for (int x = 0; x < _width; x++)
 		{
-			_spriteArray[y][x]->Reset(device3d, spriteDX);
+			_spriteArray[y][x]->Reset();
 		}
 	}
 }

@@ -6,6 +6,7 @@
 #include "Map.h"
 #include "GameSystem.h"
 #include "Character.h"
+#include "ComponentSystem.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -250,7 +251,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 						// 2D는 이 영역에서 그려줌
 						{
 							map->Render();
-							character->Render();
+							//character->Render();
 							
 						}
 						spriteDX->End();
@@ -314,13 +315,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 		}
 	}
 	// 프로그램이 끝나기 전에, 사용했던 자원을 해제한다.
-	map->Deinit();
+	ComponentSystem::GetInstance()->RemoveAllComponents();
+	/*map->Deinit();
 	delete map;
 	map = NULL;
 
 	character->Deinit();
 	delete character;
-	character = NULL;
+	character = NULL;*/
 	
 	ResourceManager::GetInstance()->RemoveAllTexture();
 	if (spriteDX)

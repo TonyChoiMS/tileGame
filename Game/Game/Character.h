@@ -4,14 +4,15 @@
 #include <d3dx9.h>
 #include "Sprite.h"
 #include "GlobalTypes.h"
+#include "Component.h"
 
 class Sprite;
 
-class Character
+class Character : public Component
 {
 private:
 	Sprite* _sprite;
-	Point _position;
+	TilePoint _tilePosition;
 
 public:
 	Character(std::wstring name);
@@ -24,5 +25,14 @@ public:
 
 	void Release();
 	void Reset();
+
+	// Move AI
+private:
+	float _movingDuration;
+	float _moveTime;
+	bool _isMoving;
+
+public:
+	void UpdateAI(float deltaTime);
 	
 };

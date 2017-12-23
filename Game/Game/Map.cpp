@@ -3,8 +3,9 @@
 #include "Map.h"
 #include "ResourceManager.h"
 #include "GameSystem.h"
+#include "TileCell.h"
 
-Map::Map(std::wstring name)
+Map::Map(std::wstring name) : Component(name)
 {
 	_startX = 0;
 	_startY = 0;
@@ -40,7 +41,7 @@ void Map::Init()
 		}
 	}
 	// 타일맵 인덱스 구성 -> 스트립트를	바탕으로 스프라이트를 생성
-	_spriteArray.clear();			// 1. 스프라이트 배열을 초기화(비우기)
+	_tileArray.clear();			// 1. 스프라이트 배열을 초기화(비우기)
 	{
 		std::vector<std::string> recordList = ResourceManager::GetInstance()->FindScript(L"MapData.csv");
 
@@ -65,24 +66,26 @@ void Map::Init()
 			strcpy(record, recordList[line].c_str());
 			token = strtok(record, ",");
 
-			std::vector<Sprite*> rowList;							// 2. 가로 배열 생성
+			std::vector<TileCell*> rowList;							// 2. 가로 배열 생성
 			for (int x = 0; x < _width; x++) 
 			{
 				// _spriteArray 구성
 				int spriteIndex = atoi(token);						// 스크립트로 대체된 부분
 				Sprite* sprite = _spriteList[spriteIndex];			// 중요한 핵심부분	
-				rowList.push_back(sprite);							// 3. 가로 배열에 내용 채움.
+				TileCell* tileCell = new TileCell();
+				tileCell->Init(sprite); 
+				rowList.push_back(tileCell);							// 3. 가로 배열에 내용 채움.
 				token = strtok(NULL, ",");							// strtok 1번째 파라미터에 NULL을 넣을 경우, 다음 줄이 아닌 오른쪽으로 한칸이동(다음 칸)
 																	//_spriteArray[y][x] = sprite;
 			}
-			_spriteArray.push_back(rowList);		// 4. 가로를 리스트에 넣어서 세로 완성
+			_tileArray.push_back(rowList);		// 4. 가로를 리스트에 넣어서 세로 완성
 			line++;									// 다 읽으면 라인 증가
 		}
 	}
 
-	int tileSize = 32;
-	_renderWidth = GameSystem::GetInstance()->GetClientWidth() / tileSize + 1;
-	_renderHeight = GameSystem::GetInstance()->GetClientHeight() / tileSize + 1;
+	_tileSize = 32;
+	_renderWidth = GameSystem::GetInstance()->GetClientWidth() / _tileSize + 1;
+	_renderHeight = GameSystem::GetInstance()->GetClientHeight() / _tileSize + 1;
 
 }
 void Map::Deinit()
@@ -96,14 +99,14 @@ void Map::Deinit()
 
 }
 
-void Map::Update(int deltaTime)
+void Map::Update(float deltaTime)
 {
 
 	for (int y = 0; y < _height; y++)
 	{
 		for (int x = 0; x < _width; x++)
 		{
-			_spriteArray[y][x]->Update(deltaTime);
+			_tileArray[y][x]->Update(deltaTime);
 		}
 	}
 }
@@ -125,9 +128,8 @@ void Map::Render()
 		endTileY = _height;
 	}
 
-	float posX = 0.0f;
-	float posY = 0.0f;
-	int tileSize = 32;
+	Point position;
+	position.x = position.y = 0.0f;
 
 	for (int y = startTileY; y < endTileY; y++)
 	{
@@ -137,14 +139,14 @@ void Map::Render()
 			{
 				if (0 <= x)
 				{
-					_spriteArray[y][x]->SetPosition(posX, posY);
-					_spriteArray[y][x]->Render();
+					_tileArray[y][x]->SetPosition(position);
+					_tileArray[y][x]->Render();
 				}
-				posX += tileSize;
+				position.x += _tileSize;
 			}
 		}
-		posX = 0.0f;
-		posY += tileSize;
+		position.x = 0.0f;
+		position.y += _tileSize;
 	}
 }
 
@@ -155,7 +157,7 @@ void Map::Release()
 	{
 		for (int x = 0; x < _width; x++)
 		{
-			_spriteArray[y][x]->Release();
+			_tileArray[y][x]->Release();
 		}
 	}
 
@@ -168,9 +170,28 @@ void Map::Reset()
 	{
 		for (int x = 0; x < _width; x++)
 		{
-			_spriteArray[y][x]->Reset();
+			_tileArray[y][x]->Reset();
 		}
 	}
+}
+
+void Map::SetTileComponent(TilePoint tilePosition, Component* component)
+{
+	_tileArray[tilePosition.y][tilePosition.x]->AddComponent(component);
+}
+
+void Map::ResetTileComponent(TilePoint tilePosition, Component* component)
+{
+	_tileArray[tilePosition.y][tilePosition.x]->RemoveComponent(component);
+}
+
+Point Map::GetPosition(int tileX, int tileY)
+{
+	Point point;
+	point.x = tileX * _tileSize;
+	point.y = tileY * _tileSize;
+	
+	return point;
 }
 
 void Map::MoveLeft()

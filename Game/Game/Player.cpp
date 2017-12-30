@@ -24,25 +24,25 @@ void Player::UpdateAI(float deltaTime)
 			TilePoint newTilePosition = _tilePosition;
 			//_currentDirection = rand() % 4;
 			// 키입력에 따라서 _currentDirection 변화
-			int currentDirection = -1;
+			eDirection currentDirection = eDirection::NONE;
 			if (InputSystem::GetInstance()->IsKeyDown(VK_LEFT))
-				currentDirection = 0;
+				currentDirection = eDirection::LEFT;
 			if (InputSystem::GetInstance()->IsKeyDown(VK_RIGHT))
-				currentDirection = 1;
+				currentDirection = eDirection::RIGHT;
 			if (InputSystem::GetInstance()->IsKeyDown(VK_UP))
-				currentDirection = 2;
+				currentDirection = eDirection::UP;
 			if (InputSystem::GetInstance()->IsKeyDown(VK_DOWN))
-				currentDirection = 3;
+				currentDirection = eDirection::DOWN;
 			
 			switch (currentDirection)
 			{
-			case 0:	newTilePosition.x--; break;
-			case 1:	newTilePosition.x++; break;
-			case 2:	newTilePosition.y--; break;
-			case 3:	newTilePosition.y++; break;
+			case eDirection::LEFT:	newTilePosition.x--; break;
+			case eDirection::RIGHT:	newTilePosition.x++; break;
+			case eDirection::UP:	newTilePosition.y--; break;
+			case eDirection::DOWN:	newTilePosition.y++; break;
 			}
 			
-			if (0 <= currentDirection)
+			if (eDirection::NONE != currentDirection)
 				_currentDirection = currentDirection;
 
 			if (newTilePosition.x != _tilePosition.x ||
@@ -55,6 +55,24 @@ void Player::UpdateAI(float deltaTime)
 					_tilePosition = newTilePosition;
 					map->SetTileComponent(_tilePosition, this);
 
+					// 캐릭터가 이동하면 맵도 이동시켜준다.
+					/*
+					switch (currentDirection)
+					{
+					case 0:
+						map->MoveLeft();
+						break;
+					case 1:
+						map->MoveRight();
+						break;
+					case 2:
+						map->MoveUp();
+						break;
+					case 3:
+						map->MoveDown();
+						break;
+					}
+					*/
 					_isMoving = true;
 				}
 			}

@@ -25,4 +25,10 @@ public:
 	virtual void Reset() = 0;
 
 	void SetPosition(Point position) { _position = position; }
+
+protected:
+	TilePoint _tilePosition;
+
+public:
+	TilePoint GetTilePosition() { return _tilePosition; }
 };

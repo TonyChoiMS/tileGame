@@ -12,9 +12,9 @@ class Character : public Component
 {
 protected:
 	std::vector<Sprite*> _spriteList;
-	int _currentDirection;
+	eDirection _currentDirection;
 
-	TilePoint _tilePosition;
+	//TilePoint _tilePosition;		// Component Level·Î »ó½Â
 
 public:
 	Character(std::wstring name);

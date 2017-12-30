@@ -203,6 +203,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 	Player* character = new Player(L"player");
 	character->Init(L"character_sprite.png", L"player");
 	
+	map->SetViewer(character);
+
 	// https://opengameart.org/
 	// 이미지 파일에서 텍스쳐 로드
 	// 이동, 회전, 스케일 행렬을 사용

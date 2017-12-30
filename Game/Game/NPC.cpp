@@ -21,13 +21,13 @@ void NPC::UpdateAI(float deltaTime)
 		if (NULL != map)
 		{
 			TilePoint newTilePosition = _tilePosition;
-			_currentDirection = rand() % 4;
+			_currentDirection = (eDirection)(rand() % 4);
 			switch (_currentDirection)
 			{
-			case 0:	newTilePosition.x--; break;
-			case 1:	newTilePosition.x++; break;
-			case 2:	newTilePosition.y--; break;
-			case 3:	newTilePosition.y++; break;
+			case eDirection::LEFT:	newTilePosition.x--; break;
+			case eDirection::RIGHT:	newTilePosition.x++; break;
+			case eDirection::UP:	newTilePosition.y--; break;
+			case eDirection::DOWN:	newTilePosition.y++; break;
 			}
 			if (0 <= newTilePosition.x && newTilePosition.x < map->GetWidth() &&
 				0 <= newTilePosition.y && newTilePosition.y < map->GetHeight())

@@ -46,6 +46,14 @@ public:
 	int GetWidth() { return _width; }
 	int GetHeight() { return _height; }
 
+	// Viewer
+private:
+	Component* _viewer;
+	TilePoint _prevViewTilePosition;
+public:
+	void SetViewer(Component* component);
+	void UpdateViewer(float deltaTime);
+
 	//Move
 private:
 	int _startX;

@@ -12,7 +12,7 @@ Character::Character(std::wstring name) : Component(name)
 	_movingDuration = 0.0f;
 	_isMoving = false;
 
-	_currentDirection = 0;
+	_currentDirection = eDirection::LEFT;
 }
 
 Character::~Character()

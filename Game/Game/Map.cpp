@@ -109,11 +109,13 @@ void Map::Update(float deltaTime)
 			_tileArray[y][x]->Update(deltaTime);
 		}
 	}
+
+	UpdateViewer(deltaTime);
 }
 
 void Map::Render()
 {
-
+	/*
 	int startTileX = _startX;
 	int startTileY = _startY;
 	int endTileX = startTileX + _renderWidth;
@@ -148,6 +150,40 @@ void Map::Render()
 		position.x = 0.0f;
 		position.y += _tileSize;
 	}
+	*/
+	int midTileCountX = _renderWidth / 2;
+	int midTileCountY = _renderHeight / 2;
+
+	int startTileX = _viewer->GetTilePosition().x - midTileCountX - 1;
+	int startTileY = _viewer->GetTilePosition().y - midTileCountY - 1;
+	int endTileX = startTileX + _renderWidth + 1;
+	int endTileY = startTileY + _renderHeight + 1;
+
+	if (_width < endTileX) 
+		endTileX = _width;
+	if (_height < endTileY) 
+		endTileY = _height;
+
+	Point renderPosition;
+	renderPosition.x = renderPosition.y = 0.0f;
+
+	for (int y = startTileY; y < endTileY; y++)
+	{
+		if (0 <= y)
+		{
+			for (int x = startTileX; x < endTileX; x++)
+			{
+				if (0 <= x)
+				{
+					_tileArray[y][x]->SetPosition(renderPosition);
+					_tileArray[y][x]->Render();
+				}
+				renderPosition.x += _tileSize;
+			}
+		}
+		renderPosition.x = 0.0f;
+		renderPosition.y += _tileSize;
+	}
 }
 
 void Map::Release()
@@ -172,6 +208,33 @@ void Map::Reset()
 		{
 			_tileArray[y][x]->Reset();
 		}
+	}
+}
+
+void Map::SetViewer(Component* component)
+{
+	_viewer = component;
+	_prevViewTilePosition = _viewer->GetTilePosition();
+}
+
+void Map::UpdateViewer(float deltaTime)
+{
+	if (NULL == _viewer)
+		return;
+
+	if (_prevViewTilePosition.x != _viewer->GetTilePosition().x ||
+		_prevViewTilePosition.y != _viewer->GetTilePosition().y)
+	{
+		if (_prevViewTilePosition.x < _viewer->GetTilePosition().x)
+			MoveRight();
+		if (_viewer->GetTilePosition().x < _prevViewTilePosition.x)
+			MoveLeft();
+		if (_prevViewTilePosition.y < _viewer->GetTilePosition().y)
+			MoveDown();
+		if (_viewer->GetTilePosition().y < _prevViewTilePosition.y)
+			MoveUp();
+
+		_prevViewTilePosition = _viewer->GetTilePosition();
 	}
 }
 

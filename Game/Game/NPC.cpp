@@ -20,24 +20,8 @@ void NPC::UpdateAI(float deltaTime)
 		Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(L"Map");
 		if (NULL != map)
 		{
-			TilePoint newTilePosition = _tilePosition;
-			_currentDirection = (eDirection)(rand() % 4);
-			switch (_currentDirection)
-			{
-			case eDirection::LEFT:	newTilePosition.x--; break;
-			case eDirection::RIGHT:	newTilePosition.x++; break;
-			case eDirection::UP:	newTilePosition.y--; break;
-			case eDirection::DOWN:	newTilePosition.y++; break;
-			}
-			if (0 <= newTilePosition.x && newTilePosition.x < map->GetWidth() &&
-				0 <= newTilePosition.y && newTilePosition.y < map->GetHeight())
-			{
-				map->ResetTileComponent(_tilePosition, this);
-				_tilePosition = newTilePosition;
-				map->SetTileComponent(_tilePosition, this);
-
-				_isMoving = true;
-			}
+			eDirection currentDirection = (eDirection)(rand() % 4);
+			MoveStart(currentDirection);
 		}
 	}
 	else
@@ -47,7 +31,7 @@ void NPC::UpdateAI(float deltaTime)
 			_movingDuration = 0.0f;
 			_isMoving = false;
 		}
-		else
+		else 
 		{
 			_movingDuration += deltaTime;
 		}

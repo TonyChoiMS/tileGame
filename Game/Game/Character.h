@@ -36,4 +36,5 @@ protected:
 
 public:
 	virtual void UpdateAI(float deltaTime);
+	void MoveStart(eDirection direction);
 };

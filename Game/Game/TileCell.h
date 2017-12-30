@@ -2,20 +2,18 @@
 #include <list>
 #include "GlobalTypes.h"
 
-class Sprite;
 class Component;
 
 class TileCell
 {
 private:
-	Sprite* _sprite;
 	Point _position;
 
 public:
 	TileCell();
 	~TileCell();
 
-	void Init(Sprite* sprite);
+	void Init();
 	void Update(float deltaTime);
 	void Render();
 
@@ -30,4 +28,6 @@ private:
 public:
 	void AddComponent(Component* component);
 	void RemoveComponent(Component* component);
+
+	bool CanMove();
 };

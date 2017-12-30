@@ -64,6 +64,9 @@ public:
 	void ResetTileComponent(TilePoint tilePosition, Component* component);
 	Point GetPosition(int tileX, int tileY);
 
+	bool CanMoveTile(TilePoint tilePosition);
+	TileCell* GetTileCell(TilePoint tilePosition);
+
 	void MoveLeft();
 	void MoveRight();
 	void MoveUp();

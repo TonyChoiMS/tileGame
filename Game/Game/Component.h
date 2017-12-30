@@ -31,4 +31,12 @@ protected:
 
 public:
 	TilePoint GetTilePosition() { return _tilePosition; }
+
+	//Move
+private:
+	bool _canMove;
+
+public:
+	bool CanMove() { return _canMove; }
+	void SetCanMove(bool canMove) { _canMove = canMove; }
 };

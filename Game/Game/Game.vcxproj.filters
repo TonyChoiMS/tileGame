@@ -28,6 +28,9 @@
     <Filter Include="소스 파일\Game\Character">
       <UniqueIdentifier>{47a82554-5f08-4a60-a351-1eac6cc3f57a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Game\Map">
+      <UniqueIdentifier>{7bfe539b-8744-44de-8956-152ecd0c9196}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -48,9 +51,6 @@
     <ClCompile Include="Texture.cpp">
       <Filter>소스 파일\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>소스 파일\Game</Filter>
-    </ClCompile>
     <ClCompile Include="GameSystem.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
@@ -59,9 +59,6 @@
     </ClCompile>
     <ClCompile Include="ComponentSystem.cpp">
       <Filter>소스 파일\System\ComponentSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="TileCell.cpp">
-      <Filter>소스 파일\Game</Filter>
     </ClCompile>
     <ClCompile Include="Character.cpp">
       <Filter>소스 파일\Game\Character</Filter>
@@ -74,6 +71,15 @@
     </ClCompile>
     <ClCompile Include="InputSystem.cpp">
       <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>소스 파일\Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="TileCell.cpp">
+      <Filter>소스 파일\Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="TileObject.cpp">
+      <Filter>소스 파일\Game\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,9 +98,6 @@
     <ClInclude Include="Texture.h">
       <Filter>소스 파일\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>소스 파일\Game</Filter>
-    </ClInclude>
     <ClInclude Include="GameSystem.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
@@ -107,9 +110,6 @@
     <ClInclude Include="ComponentSystem.h">
       <Filter>소스 파일\System\ComponentSystem</Filter>
     </ClInclude>
-    <ClInclude Include="TileCell.h">
-      <Filter>소스 파일\Game</Filter>
-    </ClInclude>
     <ClInclude Include="InputSystem.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
@@ -121,6 +121,15 @@
     </ClInclude>
     <ClInclude Include="NPC.h">
       <Filter>소스 파일\Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>소스 파일\Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="TileCell.h">
+      <Filter>소스 파일\Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="TileObject.h">
+      <Filter>소스 파일\Game\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

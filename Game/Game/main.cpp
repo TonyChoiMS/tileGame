@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <d3dx9.h>
+#include <list>
 #include "InputSystem.h"
 #include "ResourceManager.h"
 #include "ComponentSystem.h"
@@ -196,12 +197,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 	GameSystem::GetInstance()->SetDeviceDX(device3d);
 	GameSystem::GetInstance()->SetSpriteDX(spriteDX);
 
+	std::list<Component*> stageComponentList;
+
+
 	Map* map = new Map(L"Map");
-	map->Init(L"MapSprite.png", L"MapData.csv");
+	map->Init(L"MapSprite.png", L"MapData_Layer");
+	stageComponentList.push_back(map);
 
 	// 1. 캐릭터 생성
 	Player* character = new Player(L"player");
 	character->Init(L"character_sprite.png", L"player");
+	stageComponentList.push_back(character);
+
+	for (int i = 0; i < 5; i++)
+	{
+		Character* npc = new NPC(L"npc");
+		npc->Init(L"character_sprite_pack.png", L"npc");
+		stageComponentList.push_back(npc);
+	}
+	
+
 	
 	map->SetViewer(character);
 
@@ -232,10 +247,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 			gameTimer.Update();
 			float deltaTime = gameTimer.GetDeltaTime();
 			// 없으면, game update
+			/*
 			map->Update(deltaTime);
 			// 캐릭터 업데이트
 			character->Update(deltaTime);
-			
+			npc->Update(deltaTime);
+			*/
+			for (std::list<Component*>::iterator it = stageComponentList.begin();
+				it != stageComponentList.end();
+				it++)
+			{
+				(*it)->Update(deltaTime);
+			}
 			frameDuration += deltaTime;
 			if (frameTime <= frameDuration)
 			{
@@ -286,8 +309,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 							// 메모리 해제 후 재시동
 
 							//망가진 데이터 처리
+							/*
 							map->Release();
 							character->Release();		// 캐릭터 릴리즈
+							npc->Release();
+							*/
+							for (std::list<Component*>::iterator it = stageComponentList.begin();
+								it != stageComponentList.end();
+								it++)
+							{
+								(*it)->Release();
+							}
 
 							direct3d = Direct3DCreate9(D3D_SDK_VERSION);
 							if (NULL != direct3d)
@@ -305,8 +337,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 									hr = D3DXCreateSprite(device3d, &spriteDX);
 									if (SUCCEEDED(hr))
 									{
+										/*
 										map->Reset();
 										character->Reset();
+										npc->Reset();
+										*/
+										for (std::list<Component*>::iterator it = stageComponentList.begin();
+											it != stageComponentList.end();
+											it++)
+										{
+											(*it)->Reset();
+										}
 									}
 								}
 							}

@@ -1,15 +1,5 @@
 #include "ComponentSystem.h"
 
-ComponentSystem::ComponentSystem()
-{
-
-}
-
-ComponentSystem::~ComponentSystem()
-{
-
-}
-
 ComponentSystem* ComponentSystem::_instance = 0;
 
 ComponentSystem* ComponentSystem::GetInstance()

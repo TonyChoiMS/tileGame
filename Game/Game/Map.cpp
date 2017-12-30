@@ -16,7 +16,7 @@ Map::~Map()
 
 }
 
-void Map::Init()
+void Map::Init(std::wstring textureFilename, std::wstring scriptFilename)
 {
 	_width = mapWidth;
 	_height = mapHeight;

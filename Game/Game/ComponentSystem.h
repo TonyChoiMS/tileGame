@@ -16,8 +16,8 @@ public:
 	static ComponentSystem* GetInstance();
 
 private:
-	ComponentSystem();
-	~ComponentSystem();
+	ComponentSystem() {};
+	~ComponentSystem() {};
 
 private:
 	std::map<std::wstring, Component*> _componentMap;

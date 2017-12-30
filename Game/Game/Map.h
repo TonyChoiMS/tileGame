@@ -34,7 +34,7 @@ public:
 	Map(std::wstring name);
 	~Map();
 
-	void Init();
+	void Init(std::wstring textureFilename, std::wstring scriptFilename);
 	void Deinit();
 	void Update(float deltaTime);
 	void Render();

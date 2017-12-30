@@ -1,12 +1,14 @@
 #include <Windows.h>
 #include <d3dx9.h>
+#include "InputSystem.h"
 #include "ResourceManager.h"
-#include "GameTimer.h"
-#include "Sprite.h"
-#include "Map.h"
-#include "GameSystem.h"
-#include "Character.h"
 #include "ComponentSystem.h"
+#include "GameSystem.h"
+#include "GameTimer.h"
+#include "Map.h"
+#include "NPC.h"
+#include "Player.h"
+#include "Sprite.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -195,11 +197,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 	GameSystem::GetInstance()->SetSpriteDX(spriteDX);
 
 	Map* map = new Map(L"Map");
-	map->Init();
+	map->Init(L"MapSprite.png", L"MapData.csv");
 
 	// 1. 캐릭터 생성
-	Character* character = new Character(L"TestChar");
-	character->Init();
+	Player* character = new Player(L"player");
+	character->Init(L"character_sprite.png", L"player");
 	
 	// https://opengameart.org/
 	// 이미지 파일에서 텍스쳐 로드
@@ -355,11 +357,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		MessageBox(0, L"Hello World", L"Hello", MB_OK);
 		return 0;
 	case WM_KEYDOWN:
+		InputSystem::GetInstance()->KeyDown(wParam);
+		break;
+	case WM_KEYUP:
 		if (VK_ESCAPE == wParam)
 		{
 			DestroyWindow(hWnd);
 		}
-		
+		InputSystem::GetInstance()->KeyUp(wParam);
 		return 0;
 	case WM_DESTROY:
 		PostQuitMessage(0);

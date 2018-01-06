@@ -7,6 +7,7 @@
 #include "Component.h"
 
 class Sprite;
+class Font;
 
 class Character : public Component
 {
@@ -20,13 +21,22 @@ public:
 	Character(std::wstring name);
 	~Character();
 
-	void Init(std::wstring textureFilename, std::wstring scriptFilename);
+	void Init(std::wstring textureFilename, std::wstring scriptFilename) override;
 	void Deinit();
 	void Update(float deltaTime);
 	void Render();
 
 	void Release();
 	void Reset();
+
+	// Common Info
+protected:
+	int _hp;
+	int _attackPoint;
+
+	// Message
+public:
+	void ReceiveMsg(const sMessageParam& param);
 
 	// AI
 protected:
@@ -37,4 +47,10 @@ protected:
 public:
 	virtual void UpdateAI(float deltaTime);
 	void MoveStart(eDirection direction);
+
+	virtual void Collision(std::vector<Component*> collisionList);
+
+	// UI
+private:
+	Font* _font;
 };

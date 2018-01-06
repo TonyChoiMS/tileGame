@@ -11,6 +11,11 @@ ComponentSystem* ComponentSystem::GetInstance()
 	return _instance;
 }
 
+void ComponentSystem::Update(float deltaTime)
+{
+	ProcessMsgQueue();
+}
+
 void ComponentSystem::AddComponent(std::wstring name, Component* component)
 {
 	std::map<std::wstring, Component*>::iterator it = _componentMap.find(name);
@@ -39,4 +44,21 @@ Component* ComponentSystem::FindComponent(std::wstring name)
 		return it->second;
 	}
 	return NULL;
+}
+
+void ComponentSystem::SendMsg(const sMessageParam& param)
+{
+	//receiver->ReceiveMsg(message, sender);
+	_msgQueue.push(param);
+}
+
+void ComponentSystem::ProcessMsgQueue()
+{
+	while (0 < _msgQueue.size())
+	{
+		sMessageParam param = _msgQueue.front();
+		_msgQueue.pop();
+		param.receiver->ReceiveMsg(param);
+	}
+	//_msgQueue
 }

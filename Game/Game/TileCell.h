@@ -29,5 +29,7 @@ public:
 	void AddComponent(Component* component);
 	void RemoveComponent(Component* component);
 
+	std::list<Component*> GetCollisionList();
+
 	bool CanMove();
 };

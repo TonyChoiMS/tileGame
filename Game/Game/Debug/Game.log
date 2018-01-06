@@ -1,6 +1,7 @@
-﻿  Character.cpp
-c:\users\atents\desktop\tilegame\game\game\character.cpp(75): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\atents\desktop\tilegame\game\game\character.cpp(96): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\atents\desktop\tilegame\game\game\character.cpp(104): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+﻿  Player.cpp
+  NPC.cpp
+  Monster.cpp
+c:\users\atents\desktop\tilegame\game\game\monster.cpp(87): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  코드를 생성하고 있습니다...
   Game.vcxproj -> C:\Users\atents\Desktop\tileGame\Game\Debug\Game.exe
   Game.vcxproj -> C:\Users\atents\Desktop\tileGame\Game\Debug\Game.pdb (Partial PDB)

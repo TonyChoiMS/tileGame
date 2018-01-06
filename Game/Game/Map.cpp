@@ -5,6 +5,7 @@
 #include "GameSystem.h"
 #include "TileCell.h"
 #include "TileObject.h"
+#include "Sprite.h"
 
 Map::Map(std::wstring name) : Component(name)
 {
@@ -22,6 +23,7 @@ void Map::Init(std::wstring textureFilename, std::wstring scriptFilename)
 	_width = mapWidth;
 	_height = mapHeight;
 
+	_tileSize = 0;
 	// Sprite List 구성
 	{
 		int srcX = 0;
@@ -300,6 +302,63 @@ TileCell* Map::GetTileCell(TilePoint tilePosition)
 	return _tileArray[tilePosition.y][tilePosition.x];
 }
 
+Component* Map::FindComponentInRange(Component* finder, int range, std::vector<eComponentType> findTypeList)
+{
+	int rangeMinX = finder->GetTilePosition().x - range;
+	int rangeMaxX = finder->GetTilePosition().x + range;
+	int rangeMinY = finder->GetTilePosition().y - range;
+	int rangeMaxY = finder->GetTilePosition().y + range;
+
+	if (rangeMinX < 0)
+	{
+		rangeMinX = 0;
+	}
+	if (GetWidth() <= rangeMaxX)
+	{
+		rangeMaxX = GetWidth() - 1;
+	}
+	if (rangeMinY < 0)
+	{
+		rangeMinY = 0;
+	}
+	if (GetHeight() <= rangeMaxY)
+	{
+		rangeMaxY = GetHeight() - 1;
+	}
+
+	Component* findComponent = NULL;
+	for (int y = rangeMinY; y < rangeMaxY; y++)
+	{
+		for (int x = rangeMinX; x < rangeMaxX; x++)
+		{
+			// NPC와 player를 검출
+			TilePoint tilePosition;
+			tilePosition.x = x;
+			tilePosition.y = y;
+			TileCell* tileCell = GetTileCell(tilePosition);
+			std::list<Component*> collsionList = tileCell->GetCollisionList();
+			if (0 < collsionList.size())
+			{
+				for (std::list<Component*>::iterator it = collsionList.begin();
+					it != collsionList.end(); it++)
+				{
+					Component* component = (*it);
+					// 살았으면 타입검사
+					if (component->IsLive())
+					{
+						for (int i = 0; i < findTypeList.size(); i++)
+						{
+							if (findTypeList[i] = component->GetType())
+								return component;
+						}
+					}
+				}
+			}
+		}
+	}
+	return NULL;
+}
+
 void Map::MoveLeft()
 {
 	_startX--;
@@ -318,4 +377,22 @@ void Map::MoveUp()
 void Map::MoveDown()
 {
 	_startY++;
+}
+
+std::vector<Component*> Map::GetTileCollisionList(TilePoint tilePosition)
+{
+	std::vector<Component*> collisionArray;
+	// 범위 체크 (맵 안에 있는지)
+	if (tilePosition.x < 0 || GetWidth() <= tilePosition.x ||
+		tilePosition.y < 0 || GetHeight() <= tilePosition.y)
+		return collisionArray;		// 맵 범위 밖에 있을 경우 아무것도 add하지 않고 푸쉬
+
+	std::list<Component*> tileCollisionList = GetTileCell(tilePosition)->GetCollisionList();
+	for (std::list<Component*>::iterator it = tileCollisionList.begin();
+		it != tileCollisionList.end(); it++)
+	{
+		collisionArray.push_back((*it));
+	}
+	
+	return collisionArray;
 }

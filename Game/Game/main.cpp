@@ -10,6 +10,8 @@
 #include "NPC.h"
 #include "Player.h"
 #include "Sprite.h"
+#include "Monster.h"
+#include "Font.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -209,15 +211,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 	character->Init(L"character_sprite.png", L"player");
 	stageComponentList.push_back(character);
 
-	for (int i = 0; i < 5; i++)
+	// NPC
+	for (int i = 0; i < 10; i++)
 	{
-		Character* npc = new NPC(L"npc");
+		WCHAR name[256];
+		wsprintf(name, L"npc_%d", i);
+		Character* npc = new NPC(name);
 		npc->Init(L"character_sprite_pack.png", L"npc");
 		stageComponentList.push_back(npc);
 	}
-	
 
-	
+	for (int i = 0; i < 20; i++)
+	{
+		WCHAR name[256];
+		wsprintf(name, L"monster_%d", i);
+		Monster* monster = new Monster(name);
+		monster->Init(L"monster_sprite_pack.png", L"monster");
+		stageComponentList.push_back(monster);
+	}
+
 	map->SetViewer(character);
 
 	// https://opengameart.org/
@@ -246,6 +258,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 		{
 			gameTimer.Update();
 			float deltaTime = gameTimer.GetDeltaTime();
+
+			ComponentSystem::GetInstance()->Update(deltaTime);
 			// 없으면, game update
 			/*
 			map->Update(deltaTime);
@@ -278,7 +292,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 						// 2D는 이 영역에서 그려줌
 						{
 							map->Render();
-							//character->Render();
+							//testFont->Render();
 							
 						}
 						spriteDX->End();
@@ -397,7 +411,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 	case WM_LBUTTONDOWN:
-		MessageBox(0, L"Hello World", L"Hello", MB_OK);
+		//MessageBox(0, L"Hello World", L"Hello", MB_OK);
 		return 0;
 	case WM_KEYDOWN:
 		InputSystem::GetInstance()->KeyDown(wParam);

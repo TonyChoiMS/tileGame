@@ -7,6 +7,7 @@
 Player::Player(std::wstring name) : Character(name)
 {
 	_moveTime = 0.15f;
+	_type = eComponentType::CT_PLAYER;
 }
 
 Player::~Player()
@@ -16,6 +17,9 @@ Player::~Player()
 
 void Player::UpdateAI(float deltaTime)
 {
+	if (false == _isLive)
+		return;
+
 	if (false == _isMoving)
 	{
 		Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(L"Map");

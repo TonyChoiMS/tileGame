@@ -1,8 +1,12 @@
 #include "Character.h"
 #include "Map.h"
 #include "ComponentSystem.h"
-
 #include "Sprite.h"
+#include "Font.h"
+
+#include <iostream>
+
+using namespace std;
 
 Character::Character(std::wstring name) : Component(name)
 {
@@ -14,6 +18,9 @@ Character::Character(std::wstring name) : Component(name)
 
 	_currentDirection = eDirection::LEFT;
 	SetCanMove(false);
+	// Common Info
+	_hp = 50;
+	_attackPoint = 10;
 }
 
 Character::~Character()
@@ -68,10 +75,27 @@ void Character::Init(std::wstring textureFilename, std::wstring scriptFilename)
 			map->SetTileComponent(_tilePosition, this);
 		}
 	}
+
+	// font
+	{
+		_font = new Font(L"Arial", 15, D3DCOLOR_ARGB(255, 0, 0, 0));
+		_font->SetRect(_position.x - 100, _position.y - 30, 200, 50);
+
+		WCHAR text[100];
+		wsprintf(text, L"HP %d", _hp);
+		_font->SetText(text);
+	}
 }
 
 void Character::Deinit()
 {
+
+	if (NULL != _font)
+	{
+		delete _font;
+		_font = NULL;
+	}
+
 	for (int i = 0; i < _spriteList.size(); i++)
 	{
 		delete _spriteList[i];
@@ -83,16 +107,24 @@ void Character::Update(float deltaTime)
 {
 	_spriteList[_currentDirection]->Update(deltaTime);
 	UpdateAI(deltaTime);
+
+	WCHAR text[100];
+	wsprintf(text, L"HP %d", _hp);
+	_font->SetText(text);
 }
 
 void Character::Render()
 {
 	_spriteList[_currentDirection]->SetPosition(_position.x, _position.y);
 	_spriteList[_currentDirection]->Render();
+
+	_font->SetPosition(_position.x-100, _position.y-30);
+	_font->Render();
 }
 
 void Character::Release()
 {
+	_font->Release();
 	for (int i = 0; i < _spriteList.size(); i++)
 	{
 		_spriteList[i]->Release();
@@ -101,9 +133,26 @@ void Character::Release()
 
 void Character::Reset()
 {
+	_font->Reset();
 	for (int i = 0; i < _spriteList.size(); i++)
 	{
 		_spriteList[i]->Reset();
+	}
+}
+
+void Character::ReceiveMsg(const sMessageParam& param)
+{
+	//MessageBox(0, param.message.c_str(), L"Hello", MB_OK);
+	if (L"Attack" == param.message)
+	{
+		
+		int attackPoint = param.attackPoint;
+		_hp -= attackPoint;
+		if (_hp < 0)
+		{
+			_isLive = false;
+			SetCanMove(true);
+		}
 	}
 }
 
@@ -131,15 +180,39 @@ void Character::MoveStart(eDirection direction)
 		if (newTilePosition.x != _tilePosition.x ||
 			newTilePosition.y != _tilePosition.y)
 		{
-			if (map->CanMoveTile(newTilePosition))
+			// Message System
+			std::vector<Component*> collisionList = map->GetTileCollisionList(newTilePosition);
+			if (0 < collisionList.size())
 			{
-				map->ResetTileComponent(_tilePosition, this);
-				_tilePosition = newTilePosition;
-				map->SetTileComponent(_tilePosition, this);
+				Collision(collisionList);
 
-				// 캐릭터가 이동하면 맵도 이동시켜준다.
-				_isMoving = true;
+			}
+			else
+			{
+				if (map->CanMoveTile(newTilePosition))
+				{
+					map->ResetTileComponent(_tilePosition, this);
+					_tilePosition = newTilePosition;
+					map->SetTileComponent(_tilePosition, this);
+
+					// 캐릭터가 이동하면 맵도 이동시켜준다.
+					_isMoving = true;
+				}
 			}
 		}
+	}
+}
+
+void Character::Collision(std::vector<Component*> collisionList)
+{
+	for (int i = 0; i < collisionList.size(); i++)
+	{
+		Component* component = collisionList[i];
+
+		sMessageParam param;
+		param.sender = this;
+		param.receiver = component;
+		param.message = L"Collision";
+		ComponentSystem::GetInstance()->SendMsg(param);
 	}
 }

@@ -81,6 +81,12 @@
     <ClCompile Include="TileObject.cpp">
       <Filter>소스 파일\Game\Map</Filter>
     </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>소스 파일\Game\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>소스 파일\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameTimer.h">
@@ -131,5 +137,16 @@
     <ClInclude Include="TileObject.h">
       <Filter>소스 파일\Game\Map</Filter>
     </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>소스 파일\Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>소스 파일\Graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ComponentMessage.h">
+      <Filter>소스 파일\System\ComponentSystem</Filter>
+    </None>
   </ItemGroup>
 </Project>

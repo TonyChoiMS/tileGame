@@ -3,7 +3,7 @@
 #include <string>
 #include <d3dx9.h>
 #include <vector>
-#include "Sprite.h"
+
 #include "Component.h"
 #include "GlobalTypes.h"
 
@@ -22,8 +22,8 @@ private:
 	std::vector<std::vector<TileCell*>> _tileArray;
 	//std::vector<std::vector<Sprite*>> _spriteArray;
 
-	int _height;
 	int _width;
+	int _height;
 
 	int _renderWidth;
 	int _renderHeight;
@@ -66,6 +66,9 @@ public:
 
 	bool CanMoveTile(TilePoint tilePosition);
 	TileCell* GetTileCell(TilePoint tilePosition);
+
+	Component* FindComponentInRange(Component* finder, int range, std::vector<eComponentType> findTypeList);
+	std::vector<Component*> GetTileCollisionList(TilePoint tilePosition);
 
 	void MoveLeft();
 	void MoveRight();

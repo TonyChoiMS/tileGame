@@ -1,10 +1,19 @@
 #include <Windows.h>
 #include <d3dx9.h>
-
+#include <list>
+#include "InputSystem.h"
+#include "ResourceManager.h"
+#include "ComponentSystem.h"
+#include "GameSystem.h"
 #include "GameTimer.h"
+#include "Map.h"
+#include "NPC.h"
+#include "Player.h"
 #include "Sprite.h"
-LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+#include "Monster.h"
+#include "Font.h"
 
+LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 // windows는 H라는 형태를 붙는다 h는 (handle:핸들) id개념
 // HINSTANCE hInstance : 현재 응용프로그램 인스턴스 핸들 ,  현재 응용프로그램에 접속해서 관리 
@@ -16,7 +25,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 // 1. 여러 응용프로그램(창)을 관리하는 것이 핵심 ( 그래야 멀티태스킹이 가능 )
 // 2. 윈도우가 '자원관리'를 해준다. ( 자원을 임의 생성, 삭제를 하면 안되고, '윈도우에게 요청'을 해야함)
 // 3. 다른 응용프로그램에서 내가 필요한 메모리를 이미 사용하고 있을 경우, 윈도우에서 접근을 제한함.
-// 4. 이벤트 주도 프로그래밍
+// 4. 이벤트 주도 프로그래밍 
 //	- 내가 직접 하는 것이 아닌, 윈도우가 던져주는 "이벤트 메시지에 대한 처리"를 하는 것
 //	- 이벤트 처리를 하고 싶지 않을 경우 idle (아무것도 안함)
 //	- 모든 이벤트는 윈도우가 관리
@@ -61,14 +70,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 
 	// 윈도우 스타일( 창모드와 풀스크린에서 옵션 값이 다름)
 	DWORD style = isWindow ? WS_OVERLAPPEDWINDOW : WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP;
-	//if (isWindow)
-	//{
-	//	style = WS_OVERLAPPEDWINDOW;					// 모든 창 옵션을 다 가져옴.
-	//}
-	//else
-	//{
-	//	style = WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP;
-	//}
+	if (isWindow)
+	{
+		style = WS_OVERLAPPEDWINDOW;					// 모든 창 옵션을 다 가져옴.
+	}
+	else
+	{
+		style = WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP;
+	}
 	// 윈도우 창을 생성하고 핸들을 얻음 (id)
 	HWND hWnd = CreateWindow(
 		// 문자열 앞의 L은 문자열을 유니코드로 변경해주는 키워드
@@ -184,11 +193,53 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 		MessageBox(0, L"Failed D3DXCreateSprite", L"Error", MB_OK);
 		return 0;
 	}
+
+	GameSystem::GetInstance()->SetClientWidth(clientWidth);
+	GameSystem::GetInstance()->SetClientHeight(clientHeight);
+	GameSystem::GetInstance()->SetDeviceDX(device3d);
+	GameSystem::GetInstance()->SetSpriteDX(spriteDX);
+
+	std::list<Component*> stageComponentList;
+
+
+	Map* map = new Map(L"Map");
+	map->Init(L"MapSprite.png", L"MapData_Layer");
+	stageComponentList.push_back(map);
+
+	// 1. 캐릭터 생성
+	Player* character = new Player(L"player");
+	character->Init(L"character_sprite.png", L"player");
+	stageComponentList.push_back(character);
+
+	// NPC
+	for (int i = 0; i < 10; i++)
+	{
+		WCHAR name[256];
+		wsprintf(name, L"npc_%d", i);
+		Character* npc = new NPC(name);
+		npc->Init(L"character_sprite_pack.png", L"npc");
+		stageComponentList.push_back(npc);
+	}
+
+	for (int i = 0; i < 20; i++)
+	{
+		WCHAR name[256];
+		wsprintf(name, L"monster_%d", i);
+		Monster* monster = new Monster(name);
+		monster->Init(L"monster_sprite_pack.png", L"monster");
+		stageComponentList.push_back(monster);
+	}
+
+	map->SetViewer(character);
+
 	// https://opengameart.org/
 	// 이미지 파일에서 텍스쳐 로드
 	// 이동, 회전, 스케일 행렬을 사용
+<<<<<<< HEAD
 	Sprite* testSprite = new Sprite(device3d, spriteDX);
 	testSprite->Init(L"character_sprite.png", L"TestScript.json");
+=======
+>>>>>>> 86cde9369e6be281b5907e7a6397782e9162fe30
 
 	// FPS 결정 ( 60 fps )
 	float frameTime = 1.0f / 60.0f;
@@ -212,11 +263,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 		{
 			gameTimer.Update();
 			float deltaTime = gameTimer.GetDeltaTime();
+
+			ComponentSystem::GetInstance()->Update(deltaTime);
 			// 없으면, game update
-
-			testSprite->Update(deltaTime);
+			/*
+			map->Update(deltaTime);
+			// 캐릭터 업데이트
+			character->Update(deltaTime);
+			npc->Update(deltaTime);
+			*/
+			for (std::list<Component*>::iterator it = stageComponentList.begin();
+				it != stageComponentList.end();
+				it++)
+			{
+				(*it)->Update(deltaTime);
+			}
 			frameDuration += deltaTime;
-
 			if (frameTime <= frameDuration)
 			{
 				frameDuration = 0;
@@ -229,12 +291,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 					{
 						// 그려야할 모든 이미지는 이 영역에서 출력(2D/3D 모두)
 						// 2D를 그릴 때는 따로 선언을 해줘야 가능
-						spriteDX->Begin(D3DXSPRITE_ALPHABLEND);				
+						spriteDX->Begin(D3DXSPRITE_ALPHABLEND);
 						// Color key는 지정된 값은 출력을 아예 안하는데 반해,
 						// Alphablend는 투명도. 알파값이 있으면 해당 알파값을 이용 (color key와 개념이 조금 다름)
+						// 2D는 이 영역에서 그려줌
 						{
-							// 2D는 이 영역에서 그려줌
-							testSprite->Render();
+							map->Render();
+							//testFont->Render();
+							
 						}
 						spriteDX->End();
 					}
@@ -264,7 +328,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 							// 메모리 해제 후 재시동
 
 							//망가진 데이터 처리
-							testSprite->Release();
+							/*
+							map->Release();
+							character->Release();		// 캐릭터 릴리즈
+							npc->Release();
+							*/
+							for (std::list<Component*>::iterator it = stageComponentList.begin();
+								it != stageComponentList.end();
+								it++)
+							{
+								(*it)->Release();
+							}
 
 							direct3d = Direct3DCreate9(D3D_SDK_VERSION);
 							if (NULL != direct3d)
@@ -280,9 +354,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 								if (SUCCEEDED(hr))
 								{
 									hr = D3DXCreateSprite(device3d, &spriteDX);
+									if (SUCCEEDED(hr))
+									{
+										/*
+										map->Reset();
+										character->Reset();
+										npc->Reset();
+										*/
+										for (std::list<Component*>::iterator it = stageComponentList.begin();
+											it != stageComponentList.end();
+											it++)
+										{
+											(*it)->Reset();
+										}
+									}
 								}
 							}
-							testSprite->Reset(device3d, spriteDX);
 						}
 					}
 				}
@@ -292,7 +379,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 		}
 	}
 	// 프로그램이 끝나기 전에, 사용했던 자원을 해제한다.
-	delete testSprite;
+	ComponentSystem::GetInstance()->RemoveAllComponents();
+	/*map->Deinit();
+	delete map;
+	map = NULL;
+
+	character->Deinit();
+	delete character;
+	character = NULL;*/
+	
+	ResourceManager::GetInstance()->RemoveAllTexture();
 	if (spriteDX)
 	{
 		spriteDX->Release();
@@ -320,13 +416,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 	case WM_LBUTTONDOWN:
-		MessageBox(0, L"Hello World", L"Hello", MB_OK);
+		//MessageBox(0, L"Hello World", L"Hello", MB_OK);
 		return 0;
 	case WM_KEYDOWN:
+		InputSystem::GetInstance()->KeyDown(wParam);
+		break;
+	case WM_KEYUP:
 		if (VK_ESCAPE == wParam)
 		{
 			DestroyWindow(hWnd);
 		}
+		InputSystem::GetInstance()->KeyUp(wParam);
 		return 0;
 	case WM_DESTROY:
 		PostQuitMessage(0);

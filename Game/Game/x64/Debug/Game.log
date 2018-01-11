@@ -1,0 +1,17 @@
+﻿  Texture.cpp
+c:\users\atents\desktop\tilegame\game\game\texture.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'd3dx9.h': No such file or directory
+  Sprite.cpp
+c:\users\atents\desktop\tilegame\game\game\sprite.cpp(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'reader.h': No such file or directory
+  ResourceManager.cpp
+c:\users\atents\desktop\tilegame\game\game\texture.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'd3dx9.h': No such file or directory
+  Map.cpp
+c:\users\atents\desktop\tilegame\game\game\map.h(4): fatal error C1083: 포함 파일을 열 수 없습니다. 'd3dx9.h': No such file or directory
+  main.cpp
+c:\users\atents\desktop\tilegame\game\game\main.cpp(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'd3dx9.h': No such file or directory
+  GameTimer.cpp
+  GameSystem.cpp
+  Frame.cpp
+c:\users\atents\desktop\tilegame\game\game\frame.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'd3dx9.h': No such file or directory
+  Character.cpp
+c:\users\atents\desktop\tilegame\game\game\character.h(4): fatal error C1083: 포함 파일을 열 수 없습니다. 'd3dx9.h': No such file or directory
+  코드를 생성하고 있습니다...

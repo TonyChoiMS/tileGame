@@ -19,6 +19,21 @@
     <Filter Include="소스 파일\System">
       <UniqueIdentifier>{251a2788-51ee-43cd-80b2-bb9657b8511c}</UniqueIdentifier>
     </Filter>
+<<<<<<< HEAD
+=======
+    <Filter Include="소스 파일\Game">
+      <UniqueIdentifier>{fe3b5a7f-5095-4bde-9dbe-ab8acee61e7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\System\ComponentSystem">
+      <UniqueIdentifier>{362feca4-01ba-46e8-b4a2-53dab0c15ee1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Game\Character">
+      <UniqueIdentifier>{47a82554-5f08-4a60-a351-1eac6cc3f57a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Game\Map">
+      <UniqueIdentifier>{7bfe539b-8744-44de-8956-152ecd0c9196}</UniqueIdentifier>
+    </Filter>
+>>>>>>> 86cde9369e6be281b5907e7a6397782e9162fe30
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,6 +54,45 @@
     <ClCompile Include="Texture.cpp">
       <Filter>소스 파일\Graphics</Filter>
     </ClCompile>
+<<<<<<< HEAD
+=======
+    <ClCompile Include="GameSystem.cpp">
+      <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>소스 파일\System\ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentSystem.cpp">
+      <Filter>소스 파일\System\ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>소스 파일\Game\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>소스 파일\Game\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일\Game\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="InputSystem.cpp">
+      <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>소스 파일\Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="TileCell.cpp">
+      <Filter>소스 파일\Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="TileObject.cpp">
+      <Filter>소스 파일\Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>소스 파일\Game\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>소스 파일\Graphics</Filter>
+    </ClCompile>
+>>>>>>> 86cde9369e6be281b5907e7a6397782e9162fe30
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameTimer.h">
@@ -56,5 +110,52 @@
     <ClInclude Include="Texture.h">
       <Filter>소스 파일\Graphics</Filter>
     </ClInclude>
+<<<<<<< HEAD
+=======
+    <ClInclude Include="GameSystem.h">
+      <Filter>소스 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalTypes.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>소스 파일\System\ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentSystem.h">
+      <Filter>소스 파일\System\ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="InputSystem.h">
+      <Filter>소스 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>소스 파일\Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>소스 파일\Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>소스 파일\Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>소스 파일\Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="TileCell.h">
+      <Filter>소스 파일\Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="TileObject.h">
+      <Filter>소스 파일\Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>소스 파일\Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>소스 파일\Graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ComponentMessage.h">
+      <Filter>소스 파일\System\ComponentSystem</Filter>
+    </None>
+>>>>>>> 86cde9369e6be281b5907e7a6397782e9162fe30
   </ItemGroup>
 </Project>

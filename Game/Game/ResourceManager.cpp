@@ -22,7 +22,11 @@ ResourceManager::~ResourceManager()
 {
 }
 
+<<<<<<< HEAD
 Texture* ResourceManager::FindTexture(std::wstring fileName, LPDIRECT3DDEVICE9 device3d)
+=======
+Texture* ResourceManager::FindTexture(std::wstring fileName)
+>>>>>>> 86cde9369e6be281b5907e7a6397782e9162fe30
 {
 	WCHAR filePath[256];
 	wsprintf(filePath, L"../Resources/images/%s", fileName.c_str());
@@ -36,7 +40,11 @@ Texture* ResourceManager::FindTexture(std::wstring fileName, LPDIRECT3DDEVICE9 d
 	}
 
 	// 없으면, 새로 생성하고
+<<<<<<< HEAD
 	Texture* texture = new Texture(device3d, filePath);
+=======
+	Texture* texture = new Texture(filePath);
+>>>>>>> 86cde9369e6be281b5907e7a6397782e9162fe30
 
 	// 생성된걸, fileName 이름으로 등록
 	_textureMap[filePath] = texture;
@@ -45,10 +53,28 @@ Texture* ResourceManager::FindTexture(std::wstring fileName, LPDIRECT3DDEVICE9 d
 	return texture;
 }
 
+<<<<<<< HEAD
+=======
+void ResourceManager::RemoveAllTexture()
+{
+	for (std::map<std::wstring, Texture*>::iterator it = _textureMap.begin();
+		it != _textureMap.end(); it++)
+	{
+		Texture* tex = it->second;
+		delete tex;
+	}
+	_textureMap.clear();
+}
+
+>>>>>>> 86cde9369e6be281b5907e7a6397782e9162fe30
 std::vector<std::string> ResourceManager::FindScript(std::wstring fileName)
 {
 	WCHAR filePath[256];
 	wsprintf(filePath, L"../Resources/Scripts/%s", fileName.c_str());
+<<<<<<< HEAD
+=======
+
+>>>>>>> 86cde9369e6be281b5907e7a6397782e9162fe30
 	std::map<std::wstring, std::vector<std::string>>::iterator it = _scriptMap.find(filePath);
 	if (it != _scriptMap.end())
 	{

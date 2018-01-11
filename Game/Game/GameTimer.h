@@ -16,5 +16,4 @@ public:
 	void Update();
 	double GetDeltaTime();
 
-
 };

@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 #include "Texture.h"
 
 
 Texture::Texture(LPDIRECT3DDEVICE9 device3d, std::wstring filePath)
 {
 	_device3d = device3d;
+=======
+#include "GameSystem.h"
+#include "Texture.h"
+
+
+Texture::Texture(std::wstring filePath)
+{
+>>>>>>> 86cde9369e6be281b5907e7a6397782e9162fe30
 	_fileName = filePath;
 
 	// 이미지 파일로 부터 이미지 정보를 얻어온다.
@@ -13,7 +22,11 @@ Texture::Texture(LPDIRECT3DDEVICE9 device3d, std::wstring filePath)
 		return;
 	}
 
+<<<<<<< HEAD
 	hr = D3DXCreateTextureFromFileEx(_device3d,
+=======
+	hr = D3DXCreateTextureFromFileEx(GameSystem::GetInstance()->GetDeviceDX(),
+>>>>>>> 86cde9369e6be281b5907e7a6397782e9162fe30
 		filePath.c_str(),
 		_texInfo.Width, _texInfo.Height,
 		1, 0,
@@ -44,12 +57,19 @@ void Texture::Release()
 	}
 }
 
+<<<<<<< HEAD
 void Texture::Reset(LPDIRECT3DDEVICE9 device3d)
 {
 	_device3d = device3d;
 
 	// Texture 다시 로드
 	HRESULT hr = D3DXCreateTextureFromFileEx(_device3d,
+=======
+void Texture::Reset()
+{
+	// Texture 다시 로드
+	HRESULT hr = D3DXCreateTextureFromFileEx(GameSystem::GetInstance()->GetDeviceDX(),
+>>>>>>> 86cde9369e6be281b5907e7a6397782e9162fe30
 		_fileName.c_str(),
 		_texInfo.Width, _texInfo.Height,
 		1, 0,

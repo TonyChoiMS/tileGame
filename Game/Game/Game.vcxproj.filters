@@ -16,6 +16,9 @@
     <Filter Include="소스 파일\Graphics">
       <UniqueIdentifier>{20f443c8-7d9c-413e-8c85-115f010a7b0a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\System">
+      <UniqueIdentifier>{251a2788-51ee-43cd-80b2-bb9657b8511c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -30,6 +33,12 @@
     <ClCompile Include="Frame.cpp">
       <Filter>소스 파일\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>소스 파일\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameTimer.h">
@@ -39,6 +48,12 @@
       <Filter>소스 파일\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Frame.h">
+      <Filter>소스 파일\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>소스 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
       <Filter>소스 파일\Graphics</Filter>
     </ClInclude>
   </ItemGroup>

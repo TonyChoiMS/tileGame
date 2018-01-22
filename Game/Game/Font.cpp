@@ -25,19 +25,11 @@ Font::~Font()
 
 void Font::Render()
 {
-	D3DCOLOR color = D3DCOLOR_ARGB(255, 0, 0, 0);
-
-	RECT rect;
-	rect.left = 100;
-	rect.top = 100;
-	rect.right = rect.left + 500;
-	rect.bottom = rect.top + 100;
-
 	// 행렬을 생성
 	D3DXMATRIX matrix;
 	D3DXMatrixTransformation2D(&matrix, NULL, 0.0f, NULL, NULL, 0.0f, NULL);
 	GameSystem::GetInstance()->GetSpriteDX()->SetTransform(&matrix);
-	_fontDX->DrawTextW(GameSystem::GetInstance()->GetSpriteDX(), _text.c_str(), -1, &_rect, DT_CENTER, color);
+	_fontDX->DrawTextW(GameSystem::GetInstance()->GetSpriteDX(), _text.c_str(), -1, &_rect, DT_CENTER, _color);
 }
 
 void Font::Release()

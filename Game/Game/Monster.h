@@ -1,11 +1,9 @@
 #pragma once
+
 #include "Character.h"
 #include <list>
-#include "ComponentMessage.h"
 
-
-class Monster
-	: public Character
+class Monster : public Character
 {
 public:
 	Monster(std::wstring name);
@@ -14,5 +12,5 @@ public:
 public:
 	void UpdateAI(float deltaTime);
 
-	void Collision(std::vector<Component*> collisionList);
+	std::vector<Component*> Collision(std::vector<Component*> collisionList);
 };

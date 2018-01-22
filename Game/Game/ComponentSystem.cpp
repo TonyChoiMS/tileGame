@@ -48,7 +48,6 @@ Component* ComponentSystem::FindComponent(std::wstring name)
 
 void ComponentSystem::SendMsg(const sMessageParam& param)
 {
-	//receiver->ReceiveMsg(message, sender);
 	_msgQueue.push(param);
 }
 
@@ -60,5 +59,4 @@ void ComponentSystem::ProcessMsgQueue()
 		_msgQueue.pop();
 		param.receiver->ReceiveMsg(param);
 	}
-	//_msgQueue
 }

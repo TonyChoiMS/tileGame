@@ -6,8 +6,6 @@
 #include "ComponentMessage.h"
 #include "Component.h"
 
-class Component;
-
 class ComponentSystem
 {
 private:
@@ -30,6 +28,7 @@ private:
 public:
 	void AddComponent(std::wstring name, Component* component);
 	void RemoveAllComponents();
+
 	Component* FindComponent(std::wstring name);
 	
 	// Message

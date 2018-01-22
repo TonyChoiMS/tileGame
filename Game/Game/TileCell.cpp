@@ -22,11 +22,6 @@ void TileCell::Update(float deltaTime)
 
 }
 
-void TileCell::SetPosition(Point position)
-{
-	_position = position;
-}
-
 void TileCell::Render()
 {
 	for (std::list<Component*>::iterator it = _componentList.begin();
@@ -45,6 +40,11 @@ void TileCell::Release()
 void TileCell::Reset()
 {
 
+}
+
+void TileCell::SetPosition(Point position)
+{
+	_position = position;
 }
 
 void TileCell::AddComponent(Component* component)

@@ -1,21 +1,30 @@
 #pragma once
 
 #include <d3dx9.h>
+#include <map>
 #include <string>
 #include <vector>
 #include "GlobalTypes.h"
 #include "Component.h"
 
+enum eStateType
+{
+	ST_NONE,
+	ST_IDLE,
+	ST_MOVE,
+	ST_ATTACK,
+	ST_DEFENSE,
+	ST_DEAD,
+};
+
 class Sprite;
 class Font;
+class State;
 
 class Character : public Component
 {
 protected:
-	std::vector<Sprite*> _spriteList;
 	eDirection _currentDirection;
-
-	//TilePoint _tilePosition;		// Component Level·Î »ó½Â
 
 public:
 	Character(std::wstring name);
@@ -29,26 +38,72 @@ public:
 	void Release();
 	void Reset();
 
+	eDirection GetDirection() { return _currentDirection; }
+
 	// Common Info
 protected:
 	int _hp;
 	int _attackPoint;
 
+public:
+	int GetAttackPoint() { return _attackPoint; }
+
 	// Message
 public:
 	void ReceiveMsg(const sMessageParam& param);
 
+	// State
+protected:
+	std::map<eStateType, State*> _stateMap;
+	State* _state;
+
+public:
+	void ChangeState(eStateType stateType);
+
 	// AI
 protected:
 	float _moveTime;
-	float _movingDuration;
 	bool _isMoving;
+	eDirection _nextDirection;
+	std::vector<Component*> _targetList;
 
 public:
 	virtual void UpdateAI(float deltaTime);
-	void MoveStart(eDirection direction);
+	void MoveStart(TilePoint newTilePosition);
+	void MoveStop();
+	bool IsMoving() { return _isMoving; }
+	float GetMoveTime() { return _moveTime; }
 
-	virtual void Collision(std::vector<Component*> collisionList);
+	void SetDirection(eDirection direction) { _currentDirection = direction; }
+	eDirection GetNextDirection() { return _nextDirection; }
+
+	virtual std::vector<Component*> Collision(std::vector<Component*> collisionList);
+
+	void SetTarget(std::vector<Component*> targetList) { _targetList = targetList; }
+	std::vector<Component*> GetTargetList() { return _targetList; }
+	void ResetTarget() { _targetList.clear(); }
+
+	// CoolTime
+protected:
+	float _attackCooltime;
+	float _attackCooltimeDuration;
+
+public:
+	void UpdateAttackCooltime(float deltaTime);
+	bool IsAttackCooltime();
+	void ResetAttackCooltime();
+
+	// Damage
+private:
+	int _damagePoint;
+
+public:
+	int GetDamagePoint() { return _damagePoint; }
+	void DecreaseHP(int damagePoint);
+
+	// Item
+public:
+	void EatItem();
 
 	// UI
 private:

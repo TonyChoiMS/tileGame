@@ -1,5 +1,7 @@
 #include "ComponentSystem.h"
 #include "Map.h"
+#include "MoveState.h"
+#include "IdleState.h"
 
 #include "NPC.h"
 
@@ -31,33 +33,24 @@ void NPC::UpdateAI(float deltaTime)
 			Component* findComponent = map->FindComponentInRange(this, 4, findTypeList);
 
 			// 적이 있으면 도망
-			eDirection currentDirection = eDirection::NONE;
+			_nextDirection = eDirection::NONE;
 			if (NULL != findComponent)
 			{
 				TilePoint targetPosition = findComponent->GetTilePosition();
 				if (targetPosition.y < _tilePosition.y)
-				{
-					currentDirection = eDirection::DOWN;
-				}
+					_nextDirection = eDirection::DOWN;
 				else if (_tilePosition.y < targetPosition.y)
-				{
-					currentDirection = eDirection::UP;
-				}
-				else if (_tilePosition.x < targetPosition.x)
-				{
-					currentDirection = eDirection::LEFT;
-				}
+					_nextDirection = eDirection::UP;
 				else if (targetPosition.x < _tilePosition.x)
-				{
-					currentDirection = eDirection::RIGHT;
-				}
+					_nextDirection = eDirection::RIGHT;
+				else if (_tilePosition.x < targetPosition.x)
+					_nextDirection = eDirection::LEFT;
 
-				// 갈 수 없는 방향이면 재조정(현재 방향을 제외 하고 나머지 방향을 검사한다.)
+				// 갈 수 없는 방향이면 재조정
 				TilePoint nextPosition = _tilePosition;
-				for (int i = 0; i < 3; i++)
+				for (int i = 0; i < 4; i++)
 				{
-					currentDirection = (eDirection)(((int)currentDirection + 1) % (int)eDirection::NONE);
-					switch (currentDirection)
+					switch (_nextDirection)
 					{
 					case eDirection::LEFT:
 						nextPosition.x = _tilePosition.x - 1;
@@ -74,32 +67,34 @@ void NPC::UpdateAI(float deltaTime)
 					}
 
 					if (map->CanMoveTile(nextPosition))
-					{
 						break;
-					}
-				}
 
+					_nextDirection = (eDirection)(((int)_nextDirection + 1) % (int)eDirection::NONE);
+				}
 			}
 			else
 			{
-				currentDirection = (eDirection)(rand() % 4);
+				_nextDirection = (eDirection)(rand() % 4);
 			}
-			if (eDirection::NONE != currentDirection)
+
+			if (eDirection::NONE != _nextDirection)
 			{
-				MoveStart(currentDirection);
+				_state->ChangeState(eStateType::ST_MOVE);
 			}
 		}
 	}
-	else
+}
+
+
+std::vector<Component*> NPC::Collision(std::vector<Component*> collisionList)
+{
+	std::vector<Component*> filterList;
+	for (int i = 0; i < collisionList.size(); i++)
 	{
-		if (_moveTime <= _movingDuration)
+		if (eComponentType::CT_MONSTER == collisionList[i]->GetType())
 		{
-			_movingDuration = 0.0f;
-			_isMoving = false;
-		}
-		else
-		{
-			_movingDuration += deltaTime;
+			filterList.push_back(collisionList[i]);
 		}
 	}
+	return filterList;
 }

@@ -1,7 +1,11 @@
-#include "TileCell.h"
-#include "Monster.h"
-#include "Map.h"
 #include "ComponentSystem.h"
+#include "Map.h"
+#include "TileCell.h"
+#include "MoveState.h"
+#include "IdleState.h"
+
+#include "Monster.h"
+
 
 Monster::Monster(std::wstring name)
 	: Character(name)
@@ -32,70 +36,43 @@ void Monster::UpdateAI(float deltaTime)
 			Component* findComponent = map->FindComponentInRange(this, 4, findTypeList);
 
 			// 적이 있으면 적 방향으로 이동
-			eDirection currentDirection = eDirection::NONE;
+			_nextDirection = eDirection::NONE;
 			if (NULL != findComponent)
 			{
 				TilePoint targetPosition = findComponent->GetTilePosition();
 				if (targetPosition.y < _tilePosition.y)
-				{
-					currentDirection = eDirection::UP;
-				}
+					_nextDirection = eDirection::UP;
 				else if (_tilePosition.y < targetPosition.y)
-				{
-					currentDirection = eDirection::DOWN;
-				}
-				else if (_tilePosition.x < targetPosition.x)
-				{
-					currentDirection = eDirection::RIGHT;
-				}
+					_nextDirection = eDirection::DOWN;
 				else if (targetPosition.x < _tilePosition.x)
-				{
-					currentDirection = eDirection::LEFT;
-				}
+					_nextDirection = eDirection::LEFT;
+				else if (_tilePosition.x < targetPosition.x)
+					_nextDirection = eDirection::RIGHT;
 				else
-				{
-					currentDirection = (eDirection)(rand() % 4);
-				}
+					_nextDirection = (eDirection)(rand() % 4);
 			}
 			else
 			{
-				currentDirection = (eDirection)(rand() % 4);
+				_nextDirection = (eDirection)(rand() % 4);
 			}
-			if (eDirection::NONE != currentDirection)
+			if (eDirection::NONE != _nextDirection)
 			{
-				MoveStart(currentDirection);
+				_state->ChangeState(eStateType::ST_MOVE);
 			}
 		}
 	}
-	else
-	{
-		if (_moveTime <= _movingDuration)
-		{
-			_movingDuration = 0.0f;
-			_isMoving = false;
-		}
-		else
-		{
-			_movingDuration += deltaTime;
-		}
-	}
-
 }
 
-void Monster::Collision(std::vector<Component*> collisionList)
+std::vector<Component*> Monster::Collision(std::vector<Component*> collisionList)
 {
-	for(int i = 0; i < collisionList.size(); i++)
+	std::vector<Component*> filterList;
+	for (int i = 0; i < collisionList.size(); i++)
 	{
-		if(eComponentType::CT_NPC == collisionList[i]->GetType() ||
+		if (eComponentType::CT_NPC == collisionList[i]->GetType() ||
 			eComponentType::CT_PLAYER == collisionList[i]->GetType())
 		{
-			//적이면 공격
-			sMessageParam param;
-			param.sender = this;
-			param.receiver = collisionList[i];
-			param.message = L"Attack";
-			param.attackPoint = _attackPoint;
-			ComponentSystem::GetInstance()->SendMsg(param);
+			filterList.push_back(collisionList[i]);
 		}
 	}
+	return filterList;
 }

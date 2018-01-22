@@ -2,6 +2,7 @@
 #include <list>
 #include "GlobalTypes.h"
 
+class Sprite;
 class Component;
 
 class TileCell
@@ -30,6 +31,7 @@ public:
 	void RemoveComponent(Component* component);
 
 	std::list<Component*> GetCollisionList();
+	std::list<Component*> GetComponentList() { return _componentList; }
 
 	bool CanMove();
 };

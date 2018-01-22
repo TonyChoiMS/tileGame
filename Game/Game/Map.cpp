@@ -1,21 +1,18 @@
 #include <string>
 
-#include "Map.h"
-#include "ResourceManager.h"
 #include "GameSystem.h"
+#include "ResourceManager.h"
+#include "Sprite.h"
 #include "TileCell.h"
 #include "TileObject.h"
-#include "Sprite.h"
+#include "Map.h"
 
 Map::Map(std::wstring name) : Component(name)
 {
-	_startX = 0;
-	_startY = 0;
 }
 
 Map::~Map()
 {
-
 }
 
 void Map::Init(std::wstring textureFilename, std::wstring scriptFilename)
@@ -58,7 +55,7 @@ void Map::Init(std::wstring textureFilename, std::wstring scriptFilename)
 		char* context = NULL;
 
 		// 첫째 라인은 맵 크기 정보
-		strcpy(record, recordList[0].c_str());
+		strcpy_s(record, recordList[0].c_str());
 		token = strtok(record, ",");		// 첫번째 칸은 스킵 (mapsize)
 		token = strtok(NULL, ",");			// 두번째 칸 실제 가로 크기 : 16
 		_width = atoi(token);
@@ -70,7 +67,7 @@ void Map::Init(std::wstring textureFilename, std::wstring scriptFilename)
 		int line = 2;
 		for (int y = 0; y < _height; y++)
 		{
-			strcpy(record, recordList[line].c_str());
+			strcpy_s(record, recordList[line].c_str());
 			token = strtok(record, ",");
 
 			std::vector<TileCell*> rowList;							// 2. 가로 배열 생성
@@ -79,6 +76,7 @@ void Map::Init(std::wstring textureFilename, std::wstring scriptFilename)
 				// _spriteArray 구성
 				int spriteIndex = atoi(token);						// 스크립트로 대체된 부분
 				Sprite* sprite = _spriteList[spriteIndex];			// 중요한 핵심부분	
+
 				TileCell* tileCell = new TileCell();
 				tileCell->Init();
 
@@ -106,10 +104,9 @@ void Map::Init(std::wstring textureFilename, std::wstring scriptFilename)
 		// 토큰으로 나눠서, 게임데이터로 변환
 		char record[1000];
 		char* token;
-		char* context = NULL;
 
 		// 첫째 라인은 맵 크기 정보
-		strcpy(record, recordList[0].c_str());
+		strcpy_s(record, recordList[0].c_str());
 		token = strtok(record, ",");		// 첫번째 칸은 스킵 (mapsize)
 		token = strtok(NULL, ",");			// 두번째 칸 실제 가로 크기 : 16
 		_width = atoi(token);
@@ -121,7 +118,7 @@ void Map::Init(std::wstring textureFilename, std::wstring scriptFilename)
 		int line = 2;
 		for (int y = 0; y < _height; y++)
 		{
-			strcpy(record, recordList[line].c_str());
+			strcpy_s(record, recordList[line].c_str());
 			token = strtok(record, ",");
 
 			std::vector<TileCell*> rowList = _tileArray[y];			// 2. 가로 배열 생성
@@ -133,7 +130,6 @@ void Map::Init(std::wstring textureFilename, std::wstring scriptFilename)
 				{
 					Sprite* sprite = _spriteList[spriteIndex];			// 중요한 핵심부분	
 					TileCell* tileCell = rowList[x];
-					//tileCell->Init();
 
 					// 타일 오브젝트를 생성
 					WCHAR name[256];
@@ -153,6 +149,7 @@ void Map::Init(std::wstring textureFilename, std::wstring scriptFilename)
 	_renderWidth = GameSystem::GetInstance()->GetClientWidth() / _tileSize + 1;
 	_renderHeight = GameSystem::GetInstance()->GetClientHeight() / _tileSize + 1;
 
+	_startX = _startY = 0;
 }
 void Map::Deinit()
 {
@@ -287,19 +284,22 @@ Point Map::GetPosition(int tileX, int tileY)
 	return point;
 }
 
-bool Map::CanMoveTile(TilePoint tilePosition)
+std::vector<Component*> Map::GetTileCollisionList(TilePoint tilePosition)
 {
-	if (0 <= tilePosition.x && tilePosition.x < GetWidth() &&
-		0 <= tilePosition.y && tilePosition.y < GetHeight())
-	{
-		return GetTileCell(tilePosition)->CanMove();
-	}
-	return false;
-}
+	std::vector<Component*> collisiontArray;
 
-TileCell* Map::GetTileCell(TilePoint tilePosition)
-{
-	return _tileArray[tilePosition.y][tilePosition.x];
+	// 범위 체크 (맵 안에 있는지)
+	if (tilePosition.x < 0 || GetWidth() <= tilePosition.x ||
+		tilePosition.y < 0 || GetHeight() <= tilePosition.y)
+		return collisiontArray;
+
+	std::list<Component*> tileCollisionList = GetTileCell(tilePosition)->GetCollisionList();
+	for (std::list<Component*>::iterator it = tileCollisionList.begin();
+		it != tileCollisionList.end(); it++)
+	{
+		collisiontArray.push_back((*it));
+	}
+	return collisiontArray;
 }
 
 Component* Map::FindComponentInRange(Component* finder, int range, std::vector<eComponentType> findTypeList)
@@ -359,6 +359,51 @@ Component* Map::FindComponentInRange(Component* finder, int range, std::vector<e
 	return NULL;
 }
 
+bool Map::CanMoveTile(TilePoint tilePosition)
+{
+	if (0 <= tilePosition.x && tilePosition.x < GetWidth() &&
+		0 <= tilePosition.y && tilePosition.y < GetHeight())
+	{
+		return GetTileCell(tilePosition)->CanMove();
+	}
+	return false;
+}
+
+TileCell* Map::GetTileCell(TilePoint tilePosition)
+{
+	return _tileArray[tilePosition.y][tilePosition.x];
+}
+
+std::vector<Component*> Map::GetTileComponentList(TilePoint tilePosition)
+{
+	std::vector<Component*> findArray;
+
+	// 범위 체크 (맵 안에 있는지)
+	if (tilePosition.x < 0 || GetWidth() <= tilePosition.x ||
+		tilePosition.y < 0 || GetHeight() <= tilePosition.y)
+		return findArray;			// 맵 범위 밖에 있을 경우 아무것도 add하지 않고 push
+
+	std::list<Component*> tileCollisionList = GetTileCell(tilePosition)->GetComponentList();
+	for (std::list<Component*>::iterator it = tileCollisionList.begin();
+		it != tileCollisionList.end(); it++)
+	{
+		findArray.push_back((*it));
+	}
+	return findArray;
+}
+
+Component* Map::FindItemInTile(TilePoint tilePosition)
+{
+	std::vector<Component*> componentList = GetTileComponentList(tilePosition);
+	for (int i = 0; i < componentList.size(); i++)
+	{
+		Component* component = componentList[i];
+		if (eComponentType::CT_ITEM == component->GetType())
+			return component;
+	}
+	return NULL;
+}
+
 void Map::MoveLeft()
 {
 	_startX--;
@@ -379,20 +424,3 @@ void Map::MoveDown()
 	_startY++;
 }
 
-std::vector<Component*> Map::GetTileCollisionList(TilePoint tilePosition)
-{
-	std::vector<Component*> collisionArray;
-	// 범위 체크 (맵 안에 있는지)
-	if (tilePosition.x < 0 || GetWidth() <= tilePosition.x ||
-		tilePosition.y < 0 || GetHeight() <= tilePosition.y)
-		return collisionArray;		// 맵 범위 밖에 있을 경우 아무것도 add하지 않고 푸쉬
-
-	std::list<Component*> tileCollisionList = GetTileCell(tilePosition)->GetCollisionList();
-	for (std::list<Component*>::iterator it = tileCollisionList.begin();
-		it != tileCollisionList.end(); it++)
-	{
-		collisionArray.push_back((*it));
-	}
-	
-	return collisionArray;
-}

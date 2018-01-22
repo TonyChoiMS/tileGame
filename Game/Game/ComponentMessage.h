@@ -9,4 +9,5 @@ struct sMessageParam
 	Component* receiver;
 	std::wstring message;
 	int attackPoint;
+	int recoveryHP;
 };

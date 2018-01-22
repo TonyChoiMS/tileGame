@@ -1,26 +1,33 @@
-#include "Character.h"
-#include "Map.h"
 #include "ComponentSystem.h"
+#include "Map.h"
 #include "Sprite.h"
 #include "Font.h"
+#include "MoveState.h"
+#include "IdleState.h"
+#include "AttackState.h"
+#include "DefenseState.h"
+#include "DeadState.h"
 
-#include <iostream>
-
-using namespace std;
+#include "Character.h"
 
 Character::Character(std::wstring name) : Component(name)
 {
 	_position.x = _position.y = 0.0f;
 
+	_state = NULL;
 	_moveTime = (float)(rand() % 100 + 50) / 100.0f;
-	_movingDuration = 0.0f;
 	_isMoving = false;
 
 	_currentDirection = eDirection::LEFT;
-	SetCanMove(false);
+	
 	// Common Info
-	_hp = 50;
+	_hp = 100;
 	_attackPoint = 10;
+
+	_attackCooltime = 1.0f;
+	_attackCooltimeDuration = 0.0f;
+
+	SetCanMove(false);
 }
 
 Character::~Character()
@@ -30,40 +37,6 @@ Character::~Character()
 
 void Character::Init(std::wstring textureFilename, std::wstring scriptFilename)
 {
-	// 화면에 그려질 스프라이트 생성
-	_spriteList.clear();
-	{
-		// left
-		std::wstring script = scriptFilename;
-		script = script.append(L"_left.json");
-		Sprite* sprite = new Sprite();
-		sprite->Init(textureFilename, script);
-		_spriteList.push_back(sprite);
-	}
-	{
-		// left
-		std::wstring script = scriptFilename;
-		script = script.append(L"_right.json");
-		Sprite* sprite = new Sprite();
-		sprite->Init(textureFilename, script);
-		_spriteList.push_back(sprite);
-	}
-	{
-		// left
-		std::wstring script = scriptFilename;
-		script = script.append(L"_up.json");
-		Sprite* sprite = new Sprite();
-		sprite->Init(textureFilename, script);
-		_spriteList.push_back(sprite);
-	}
-	{
-		// left
-		std::wstring script = scriptFilename;
-		script = script.append(L"_down.json");
-		Sprite* sprite = new Sprite();
-		sprite->Init(textureFilename, script);
-		_spriteList.push_back(sprite);
-	}
 	// 타일 인덱스를 통한 위치 세팅 테스트
 	{
 		// 이름으로 (맵인) 컴포넌트를 찾는다.
@@ -85,134 +58,177 @@ void Character::Init(std::wstring textureFilename, std::wstring scriptFilename)
 		wsprintf(text, L"HP %d", _hp);
 		_font->SetText(text);
 	}
+
+	// StateMap  구성
+	{
+		State* state = new IdleState(this);
+		state->CreateSprite(textureFilename, scriptFilename);
+		_stateMap[eStateType::ST_IDLE] = state;
+	}
+	{
+		State* state = new MoveState(this);
+		state->CreateSprite(textureFilename, scriptFilename);
+		_stateMap[eStateType::ST_MOVE] = state;
+	}
+	{
+		State* state = new AttackState(this);
+		state->CreateSprite(textureFilename, scriptFilename);
+		_stateMap[eStateType::ST_ATTACK] = state;
+	}
+	{
+		State* state = new DefenseState(this);
+		state->CreateSprite(textureFilename, scriptFilename);
+		_stateMap[eStateType::ST_DEFENSE] = state;
+	}
+	{
+		State* state = new DeadState(this);
+		state->CreateSprite(textureFilename, scriptFilename);
+		_stateMap[eStateType::ST_DEAD] = state;
+	}
+	ChangeState(eStateType::ST_IDLE);
 }
 
 void Character::Deinit()
 {
+	for (std::map<eStateType, State*>::iterator it = _stateMap.begin();
+		it != _stateMap.end();
+		it++)
+	{
+		State* state = it->second;
+		delete state;
+	}
+	_stateMap.clear();
 
 	if (NULL != _font)
 	{
 		delete _font;
 		_font = NULL;
 	}
-
-	for (int i = 0; i < _spriteList.size(); i++)
-	{
-		delete _spriteList[i];
-	}
-	_spriteList.clear();
 }
 
 void Character::Update(float deltaTime)
 {
-	_spriteList[_currentDirection]->Update(deltaTime);
-	UpdateAI(deltaTime);
+	_state->Update(deltaTime);
+	UpdateAttackCooltime(deltaTime);
 
 	WCHAR text[100];
-	wsprintf(text, L"HP %d", _hp);
+	int coolTime = (int)(_attackCooltimeDuration * 1000.0f);
+	wsprintf(text, L"HP %d\n%d", _hp, coolTime);
 	_font->SetText(text);
 }
 
 void Character::Render()
 {
-	_spriteList[_currentDirection]->SetPosition(_position.x, _position.y);
-	_spriteList[_currentDirection]->Render();
-
-	_font->SetPosition(_position.x-100, _position.y-30);
+	_state->Render();
+	_font->SetPosition(_position.x-100, _position.y-50);
 	_font->Render();
 }
 
 void Character::Release()
 {
+	_state->Release();
 	_font->Release();
-	for (int i = 0; i < _spriteList.size(); i++)
-	{
-		_spriteList[i]->Release();
-	}
 }
 
 void Character::Reset()
 {
+	_state->Reset();
 	_font->Reset();
-	for (int i = 0; i < _spriteList.size(); i++)
-	{
-		_spriteList[i]->Reset();
-	}
 }
 
 void Character::ReceiveMsg(const sMessageParam& param)
 {
-	//MessageBox(0, param.message.c_str(), L"Hello", MB_OK);
 	if (L"Attack" == param.message)
 	{
-		
-		int attackPoint = param.attackPoint;
-		_hp -= attackPoint;
-		if (_hp < 0)
-		{
-			_isLive = false;
-			SetCanMove(true);
-		}
+		_damagePoint = param.attackPoint;
+		_state->ChangeState(eStateType::ST_DEFENSE);
 	}
+	if (L"RecoveryHP" == param.message)
+	{
+		//RecoverHP(param.recoveryHP);
+		_hp += param.recoveryHP;
+		if (100 < _hp)
+			_hp = 100;
+	}
+}
+
+void Character::ChangeState(eStateType stateType)
+{
+	if (NULL != _state)
+		_state->Stop();
+
+	_state = _stateMap[stateType];
+	_state->Start();
 }
 
 void Character::UpdateAI(float deltaTime)
 {
 }
 
-void Character::MoveStart(eDirection direction)
+void Character::MoveStart(TilePoint newTilePosition)
 {
 	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(L"Map");
 	if (NULL != map)
 	{
-		TilePoint newTilePosition = _tilePosition;
-		switch (direction)
-		{
-		case eDirection::LEFT:	newTilePosition.x--; break;
-		case eDirection::RIGHT:	newTilePosition.x++; break;
-		case eDirection::UP:	newTilePosition.y--; break;
-		case eDirection::DOWN:	newTilePosition.y++; break;
-		}
+		map->ResetTileComponent(_tilePosition, this);
+		_tilePosition = newTilePosition;
+		map->SetTileComponent(_tilePosition, this);
 
-		if (eDirection::NONE != direction)
-			_currentDirection = direction;
-
-		if (newTilePosition.x != _tilePosition.x ||
-			newTilePosition.y != _tilePosition.y)
-		{
-			// Message System
-			std::vector<Component*> collisionList = map->GetTileCollisionList(newTilePosition);
-			if (0 < collisionList.size())
-			{
-				Collision(collisionList);
-
-			}
-			else
-			{
-				if (map->CanMoveTile(newTilePosition))
-				{
-					map->ResetTileComponent(_tilePosition, this);
-					_tilePosition = newTilePosition;
-					map->SetTileComponent(_tilePosition, this);
-
-					// 캐릭터가 이동하면 맵도 이동시켜준다.
-					_isMoving = true;
-				}
-			}
-		}
+		_isMoving = true;
 	}
 }
 
-void Character::Collision(std::vector<Component*> collisionList)
+void Character::MoveStop()
 {
-	for (int i = 0; i < collisionList.size(); i++)
-	{
-		Component* component = collisionList[i];
+	_isMoving = false;
+}
 
-		sMessageParam param;
-		param.sender = this;
-		param.receiver = component;
-		param.message = L"Collision";
-		ComponentSystem::GetInstance()->SendMsg(param);
+std::vector<Component*> Character::Collision(std::vector<Component*> collisionList)
+{
+	return collisionList;
+}
+
+void Character::UpdateAttackCooltime(float deltaTime)
+{
+	if (_attackCooltimeDuration < _attackCooltime)
+		_attackCooltimeDuration += deltaTime;
+}
+
+bool Character::IsAttackCooltime()
+{
+	if (_attackCooltime <= _attackCooltimeDuration)
+		return true;
+	return false;
+}
+
+void Character::ResetAttackCooltime()
+{
+	_attackCooltimeDuration = 0.0f;
+}
+
+void Character::DecreaseHP(int damagePoint)
+{
+	_hp -= damagePoint;
+	if (_hp < 0)
+	{
+		_isLive = false;
+		_hp = 0;
+	}
+}
+
+void Character::EatItem()
+{
+	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(L"Map");
+	if (NULL != map)
+	{
+		Component* item = map->FindItemInTile(_tilePosition);
+		if (NULL != item)
+		{
+			sMessageParam msg;
+			msg.sender = this;
+			msg.receiver = item;
+			msg.message = L"Use";
+			ComponentSystem::GetInstance()->SendMsg(msg);
+		}
 	}
 }

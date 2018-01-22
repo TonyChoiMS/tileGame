@@ -9,22 +9,20 @@ enum eComponentType
 	CT_DEFAULT,
 	CT_PLAYER,
 	CT_NPC,
-	CT_MONSTER
+	CT_MONSTER,
+	CT_ITEM,
 };
 class Component
 {
 protected:
+	eComponentType _type;
 	std::wstring _name;
 	Point _position;
-	eComponentType _type;
 	bool _isLive;
 
 public:
 	Component(std::wstring name);
 	virtual ~Component();
-	eComponentType GetType() { return _type; }
-	bool IsLive() { return _isLive; }
-	void SetIsLive(bool isLive) { _isLive = isLive; }
 
 public:
 	// =0 을 붙이면, 추상 가상함수가 되기 때문에, Component를 상속받는
@@ -38,6 +36,12 @@ public:
 	virtual void Reset() = 0;
 
 	void SetPosition(Point position) { _position = position; }
+	Point GetPosition() { return _position; }
+
+	eComponentType GetType() { return _type; }
+
+	bool IsLive() { return _isLive; }
+	void SetLive(bool isLive) { _isLive = isLive; }
 
 protected:
 	TilePoint _tilePosition;

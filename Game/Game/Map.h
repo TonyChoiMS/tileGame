@@ -1,11 +1,10 @@
 #pragma once
 
-#include <string>
 #include <d3dx9.h>
 #include <vector>
-
-#include "Component.h"
+#include <string>
 #include "GlobalTypes.h"
+#include "Component.h"
 
 #define mapWidth 16
 #define mapHeight 16
@@ -20,8 +19,7 @@ private:
 	
 	// 기존 스프라이트 배열 대신, 타일셀 배열을 생성.
 	std::vector<std::vector<TileCell*>> _tileArray;
-	//std::vector<std::vector<Sprite*>> _spriteArray;
-
+	
 	int _width;
 	int _height;
 
@@ -64,14 +62,17 @@ public:
 	void ResetTileComponent(TilePoint tilePosition, Component* component);
 	Point GetPosition(int tileX, int tileY);
 
+	std::vector<Component*> GetTileCollisionList(TilePoint tilePosition);
+	Component* FindComponentInRange(Component* finderr, int range, std::vector<eComponentType> findTypeList);
 	bool CanMoveTile(TilePoint tilePosition);
 	TileCell* GetTileCell(TilePoint tilePosition);
 
-	Component* FindComponentInRange(Component* finder, int range, std::vector<eComponentType> findTypeList);
-	std::vector<Component*> GetTileCollisionList(TilePoint tilePosition);
+	std::vector<Component*> GetTileComponentList(TilePoint tilePosition);
+
+	Component* FindItemInTile(TilePoint tilePosition);
 
 	void MoveLeft();
 	void MoveRight();
 	void MoveUp();
-	void MoveDown();	
+	void MoveDown();
 };

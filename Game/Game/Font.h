@@ -12,6 +12,7 @@ private:
 	std::wstring _text;
 	std::wstring _fontName;
 	int _fontSize;
+
 	int _width;
 	int _height;
 

@@ -3,6 +3,8 @@
 
 Component::Component(std::wstring name)
 {
+	_type = eComponentType::CT_DEFAULT;
+
 	_name = name;
 	_tilePosition.x = _tilePosition.y = 0;
 	_canMove = true;

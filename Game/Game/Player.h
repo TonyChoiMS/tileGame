@@ -9,5 +9,6 @@ public:
 	~Player();
 
 public:
-	void UpdateAI(float deltaTime); // ¿Á¡§¿«
+	void UpdateAI(float deltaTime);
+	std::vector<Component*> Collision(std::vector<Component*> collisionList);
 };

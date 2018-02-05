@@ -1,3 +1,5 @@
+#pragma warning(disable : 4996) //_CRT_SECURE_NO_WARNINGS
+
 #include <string>
 
 #include "GameSystem.h"

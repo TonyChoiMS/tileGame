@@ -1,17 +1,62 @@
-﻿  Texture.cpp
-c:\users\atents\desktop\tilegame\game\game\texture.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'd3dx9.h': No such file or directory
-  Sprite.cpp
-c:\users\atents\desktop\tilegame\game\game\sprite.cpp(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'reader.h': No such file or directory
-  ResourceManager.cpp
-c:\users\atents\desktop\tilegame\game\game\texture.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'd3dx9.h': No such file or directory
+﻿  TileObject.cpp
+  TileCell.cpp
+  Player.cpp
+  NPC.cpp
+  Monster.cpp
   Map.cpp
-c:\users\atents\desktop\tilegame\game\game\map.h(4): fatal error C1083: 포함 파일을 열 수 없습니다. 'd3dx9.h': No such file or directory
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(151): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(152): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(283): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(284): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Texture.cpp
+  State.cpp
+  Sprite.cpp
+c:\users\administrator\desktop\choims\tilegame\game\game\sprite.cpp(46): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  ResourceManager.cpp
+  RecoveryItem.cpp
+  MoveState.cpp
   main.cpp
-c:\users\atents\desktop\tilegame\game\game\main.cpp(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'd3dx9.h': No such file or directory
+c:\users\administrator\desktop\choims\tilegame\game\game\main.cpp(198): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\main.cpp(199): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\main.cpp(269): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\main.cpp(426): warning C4244: '인수': 'WPARAM'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\main.cpp(433): warning C4244: '인수': 'WPARAM'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  InputSystem.cpp
+  IdleState.cpp
   GameTimer.cpp
   GameSystem.cpp
   Frame.cpp
-c:\users\atents\desktop\tilegame\game\game\frame.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'd3dx9.h': No such file or directory
-  Character.cpp
-c:\users\atents\desktop\tilegame\game\game\character.h(4): fatal error C1083: 포함 파일을 열 수 없습니다. 'd3dx9.h': No such file or directory
+c:\users\administrator\desktop\choims\tilegame\game\game\frame.cpp(31): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\frame.cpp(32): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Font.cpp
+  DefenseState.cpp
   코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  DeadState.cpp
+c:\users\administrator\desktop\choims\tilegame\game\game\deadstate.cpp(54): warning C4244: '인수': 'float'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  ComponentSystem.cpp
+  Component.cpp
+  Character.cpp
+c:\users\administrator\desktop\choims\tilegame\game\game\character.cpp(55): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\character.cpp(123): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  AttackState.cpp
+  코드를 생성하고 있습니다...
+Font.obj : error LNK2019: D3DXMatrixTransformation2D 외부 기호(참조 위치: "public: void __cdecl Font::Render(void)" (?Render@Font@@QEAAXXZ) 함수)에서 확인하지 못했습니다.
+Frame.obj : error LNK2001: D3DXMatrixTransformation2D 외부 기호를 확인할 수 없습니다.
+Font.obj : error LNK2019: D3DXCreateFontW 외부 기호(참조 위치: "public: __cdecl Font::Font(class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,int,unsigned long)" (??0Font@@QEAA@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@HK@Z) 함수)에서 확인하지 못했습니다.
+main.obj : error LNK2019: Direct3DCreate9 외부 기호(참조 위치: WinMain 함수)에서 확인하지 못했습니다.
+main.obj : error LNK2019: D3DXCreateSprite 외부 기호(참조 위치: WinMain 함수)에서 확인하지 못했습니다.
+Sprite.obj : error LNK2019: "public: __cdecl Json::Value::Value(enum Json::ValueType)" (??0Value@Json@@QEAA@W4ValueType@1@@Z) 외부 기호(참조 위치: "public: void __cdecl Sprite::Init(class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,float)" (?Init@Sprite@@QEAAXV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@0M@Z) 함수)에서 확인하지 못했습니다.
+Sprite.obj : error LNK2019: "public: __cdecl Json::Value::~Value(void)" (??1Value@Json@@QEAA@XZ) 외부 기호(참조 위치: "public: void __cdecl Sprite::Init(class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,float)" (?Init@Sprite@@QEAAXV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@0M@Z) 함수)에서 확인하지 못했습니다.
+Sprite.obj : error LNK2019: "public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl Json::Value::asString(void)const " (?asString@Value@Json@@QEBA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ) 외부 기호(참조 위치: "public: void __cdecl Sprite::Init(class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,float)" (?Init@Sprite@@QEAAXV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@0M@Z) 함수)에서 확인하지 못했습니다.
+Sprite.obj : error LNK2019: "public: int __cdecl Json::Value::asInt(void)const " (?asInt@Value@Json@@QEBAHXZ) 외부 기호(참조 위치: "public: void __cdecl Sprite::Init(class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,float)" (?Init@Sprite@@QEAAXV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@0M@Z) 함수)에서 확인하지 못했습니다.
+Sprite.obj : error LNK2019: "public: double __cdecl Json::Value::asDouble(void)const " (?asDouble@Value@Json@@QEBANXZ) 외부 기호(참조 위치: "public: void __cdecl Sprite::Init(class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,float)" (?Init@Sprite@@QEAAXV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@0M@Z) 함수)에서 확인하지 못했습니다.
+Sprite.obj : error LNK2019: "public: class Json::Value & __cdecl Json::Value::operator[](char const *)" (??AValue@Json@@QEAAAEAV01@PEBD@Z) 외부 기호(참조 위치: "public: void __cdecl Sprite::Init(class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,float)" (?Init@Sprite@@QEAAXV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@0M@Z) 함수)에서 확인하지 못했습니다.
+Sprite.obj : error LNK2019: "public: __cdecl Json::Reader::Reader(void)" (??0Reader@Json@@QEAA@XZ) 외부 기호(참조 위치: "public: void __cdecl Sprite::Init(class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,float)" (?Init@Sprite@@QEAAXV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@0M@Z) 함수)에서 확인하지 못했습니다.
+Sprite.obj : error LNK2019: "public: bool __cdecl Json::Reader::parse(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,class Json::Value &,bool)" (?parse@Reader@Json@@QEAA_NAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AEAVValue@2@_N@Z) 외부 기호(참조 위치: "public: void __cdecl Sprite::Init(class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >,float)" (?Init@Sprite@@QEAAXV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@0M@Z) 함수)에서 확인하지 못했습니다.
+Texture.obj : error LNK2019: D3DXGetImageInfoFromFileW 외부 기호(참조 위치: "public: __cdecl Texture::Texture(class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >)" (??0Texture@@QEAA@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@@Z) 함수)에서 확인하지 못했습니다.
+Texture.obj : error LNK2019: D3DXCreateTextureFromFileExW 외부 기호(참조 위치: "public: __cdecl Texture::Texture(class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >)" (??0Texture@@QEAA@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@@Z) 함수)에서 확인하지 못했습니다.
+..\..\SDK\json\Lib\json_vc71_libmtd.lib : warning LNK4272: 'x86' 라이브러리 컴퓨터 종류가 'x64' 대상 컴퓨터 종류와 충돌합니다.
+..\..\SDK\DirectX\Lib\x86\d3dx9d.lib : warning LNK4272: 'x86' 라이브러리 컴퓨터 종류가 'x64' 대상 컴퓨터 종류와 충돌합니다.
+..\..\SDK\DirectX\Lib\x86\d3d9.lib : warning LNK4272: 'x86' 라이브러리 컴퓨터 종류가 'x64' 대상 컴퓨터 종류와 충돌합니다.
+C:\Users\Administrator\Desktop\ChoiMS\tileGame\Game\x64\Debug\Game.exe : fatal error LNK1120: 14개의 확인할 수 없는 외부 참조입니다.

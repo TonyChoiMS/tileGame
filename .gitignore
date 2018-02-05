@@ -1,2 +1,5 @@
-**/Game/.vs/*
-**/Game/Debug/*
+*.slo
+*.lo
+*.o
+*.obj
+*.db

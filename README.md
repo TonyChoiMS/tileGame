@@ -14,7 +14,7 @@ Updating....
  - Component System
 
 ### Using Algorhythm
- -  A*(star) Algorhythm (Comming Soon...)
+ -  A*(star) Algorhythm (Update!!!)
 
 ### Data Structure
  - Dimensional Array

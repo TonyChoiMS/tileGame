@@ -77,8 +77,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>../../SDK/json/include;../../SDK/DirectX/Include;$(IncludePath)</IncludePath>
-    <LibraryPath>../../SDK/json/Lib;../../SDK/DirectX/Lib/x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -104,12 +102,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>json_vc71_libmtd.lib;d3dx9d.lib;d3d9.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -149,8 +146,8 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentSystem.cpp" />
-    <ClCompile Include="DeadState.cpp" />
     <ClCompile Include="DefenseState.cpp" />
+    <ClCompile Include="DieState.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Frame.cpp" />
     <ClCompile Include="GameSystem.cpp" />
@@ -158,45 +155,59 @@
     <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MoveState.cpp" />
+    <ClCompile Include="NPC.cpp" />
+    <ClCompile Include="PathfinderPlayer.cpp" />
+    <ClCompile Include="PathfindingIdeState.cpp" />
+    <ClCompile Include="PathfindingImmedateState.cpp" />
+    <ClCompile Include="PathfindingMoveState.cpp" />
+    <ClCompile Include="PathfindingState.cpp" />
+    <ClCompile Include="PathfinderMonster.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="RecoveryItem.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Map.cpp" />
-    <ClCompile Include="Monster.cpp" />
-    <ClCompile Include="NPC.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="TileCell.cpp" />
     <ClCompile Include="TileObject.cpp" />
+    <ClCompile Include="TrapItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentSystem.h" />
-    <ClInclude Include="DeadState.h" />
     <ClInclude Include="DefenseState.h" />
+    <ClInclude Include="DieState.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Frame.h" />
     <ClInclude Include="GameSystem.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="GlobalTypes.h" />
     <ClInclude Include="IdleState.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="MoveState.h" />
+    <ClInclude Include="NPC.h" />
+    <ClInclude Include="PathfinderMonster.h" />
+    <ClInclude Include="PathfinderPlayer.h" />
+    <ClInclude Include="PathfindingIdeState.h" />
+    <ClInclude Include="PathfindingImmedateState.h" />
+    <ClInclude Include="PathfindingMoveState.h" />
+    <ClInclude Include="PathfindingState.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="RecoveryItem.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="GlobalTypes.h" />
-    <ClInclude Include="InputSystem.h" />
-    <ClInclude Include="Map.h" />
-    <ClInclude Include="Monster.h" />
-    <ClInclude Include="NPC.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="TileCell.h" />
     <ClInclude Include="TileObject.h" />
+    <ClInclude Include="TrapItem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ComponentMessage.h" />

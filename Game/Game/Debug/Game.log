@@ -1,59 +1,72 @@
-﻿  TileObject.cpp
+﻿  TrapItem.cpp
+  TileObject.cpp
   TileCell.cpp
-  Player.cpp
-c:\users\administrator\desktop\choims\tilegame\game\game\player.cpp(56): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  NPC.cpp
-c:\users\administrator\desktop\choims\tilegame\game\game\npc.cpp(92): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  Monster.cpp
-c:\users\administrator\desktop\choims\tilegame\game\game\monster.cpp(69): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  Map.cpp
-c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(149): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(150): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(157): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(281): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(282): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(349): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(398): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   Texture.cpp
   State.cpp
-c:\users\administrator\desktop\choims\tilegame\game\game\state.cpp(30): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\state.cpp(38): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\state.cpp(29): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\state.cpp(36): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   Sprite.cpp
-c:\users\administrator\desktop\choims\tilegame\game\game\sprite.cpp(16): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\sprite.cpp(31): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\sprite.cpp(46): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\sprite.cpp(82): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\sprite.cpp(90): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\sprite.cpp(101): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\sprite.cpp(42): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\sprite.cpp(63): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\sprite.cpp(79): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\sprite.cpp(174): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\sprite.cpp(184): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\sprite.cpp(222): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   ResourceManager.cpp
   RecoveryItem.cpp
+  Player.cpp
+c:\users\administrator\desktop\choims\tilegame\game\game\player.cpp(122): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  PathfinderMonster.cpp
+  PathfindingState.cpp
+  PathfindingMoveState.cpp
+  PathfindingImmedateState.cpp
+  PathfindingIdeState.cpp
+  PathfinderPlayer.cpp
+  NPC.cpp
+c:\users\administrator\desktop\choims\tilegame\game\game\npc.cpp(201): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   MoveState.cpp
+  Monster.cpp
+c:\users\administrator\desktop\choims\tilegame\game\game\monster.cpp(151): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  Map.cpp
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(70): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(71): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(79): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(214): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(215): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(725): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(769): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(817): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(818): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(851): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(852): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(853): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\map.cpp(854): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   main.cpp
-c:\users\administrator\desktop\choims\tilegame\game\game\main.cpp(198): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\main.cpp(199): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\main.cpp(269): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\main.cpp(204): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\main.cpp(205): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\main.cpp(304): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
   InputSystem.cpp
   IdleState.cpp
   GameTimer.cpp
   GameSystem.cpp
   Frame.cpp
-c:\users\administrator\desktop\choims\tilegame\game\game\frame.cpp(31): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\frame.cpp(32): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\frame.cpp(26): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\frame.cpp(27): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Font.cpp
+c:\users\administrator\desktop\choims\tilegame\game\game\font.cpp(6): warning C4101: 'testFontDX' :참조되지 않은 지역 변수입니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\font.cpp(46): warning C4101: 'testFontDX' :참조되지 않은 지역 변수입니다.
+  DieState.cpp
   DefenseState.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  DeadState.cpp
-c:\users\administrator\desktop\choims\tilegame\game\game\deadstate.cpp(54): warning C4244: '인수': 'float'에서 'const unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   ComponentSystem.cpp
   Component.cpp
   Character.cpp
-c:\users\administrator\desktop\choims\tilegame\game\game\character.cpp(55): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\administrator\desktop\choims\tilegame\game\game\character.cpp(123): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\character.cpp(113): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\character.cpp(217): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   AttackState.cpp
-c:\users\administrator\desktop\choims\tilegame\game\game\attackstate.cpp(19): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\administrator\desktop\choims\tilegame\game\game\attackstate.cpp(17): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   코드를 생성하고 있습니다...
-  LINK : C:\Users\Administrator\Desktop\ChoiMS\tileGame\Game\Debug\Game.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
 json_vc71_libmtd.lib(json_reader.obj) : warning LNK4099: 'lib_json.pdb' PDB를 'json_vc71_libmtd.lib(json_reader.obj)' 또는 'C:\Users\Administrator\Desktop\ChoiMS\tileGame\Game\Debug\lib_json.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 json_vc71_libmtd.lib(json_value.obj) : warning LNK4099: 'lib_json.pdb' PDB를 'json_vc71_libmtd.lib(json_value.obj)' 또는 'C:\Users\Administrator\Desktop\ChoiMS\tileGame\Game\Debug\lib_json.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 json_vc71_libmtd.lib(json_writer.obj) : warning LNK4099: 'lib_json.pdb' PDB를 'json_vc71_libmtd.lib(json_writer.obj)' 또는 'C:\Users\Administrator\Desktop\ChoiMS\tileGame\Game\Debug\lib_json.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.

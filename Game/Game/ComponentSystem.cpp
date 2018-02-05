@@ -11,11 +11,10 @@ ComponentSystem* ComponentSystem::GetInstance()
 	return _instance;
 }
 
-void ComponentSystem::Update(float deltaTime)
+void ComponentSystem::Update(float deltatime)
 {
 	ProcessMsgQueue();
 }
-
 void ComponentSystem::AddComponent(std::wstring name, Component* component)
 {
 	std::map<std::wstring, Component*>::iterator it = _componentMap.find(name);
@@ -23,6 +22,7 @@ void ComponentSystem::AddComponent(std::wstring name, Component* component)
 	{
 		_componentMap[name] = component;
 	}
+
 }
 
 void ComponentSystem::RemoveAllComponents()
@@ -36,7 +36,7 @@ void ComponentSystem::RemoveAllComponents()
 	_componentMap.clear();
 }
 
-Component* ComponentSystem::FindComponent(std::wstring name)
+Component* ComponentSystem::FindCompoent(std::wstring name)
 {
 	std::map<std::wstring, Component*>::iterator it = _componentMap.find(name);
 	if (it != _componentMap.end())
@@ -44,11 +44,16 @@ Component* ComponentSystem::FindComponent(std::wstring name)
 		return it->second;
 	}
 	return NULL;
+
 }
 
+// 참조는 NULL을 허용 
+// 주소 
+//void ComponentSystem::SendMsg(std::wstring message, Component* receiver, Component* sender)
 void ComponentSystem::SendMsg(const sMessageParam& param)
 {
 	_msgQueue.push(param);
+	//receiver->ReceiveMsg(message, sender);
 }
 
 void ComponentSystem::ProcessMsgQueue()

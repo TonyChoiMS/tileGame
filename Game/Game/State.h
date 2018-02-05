@@ -1,7 +1,6 @@
 #pragma once
-
-#include <string>
 #include <vector>
+#include <string>
 
 class Character;
 class Sprite;
@@ -18,13 +17,12 @@ protected:
 public:
 	State(Character* character);
 	~State() {}
-
 public:
 	virtual void Start();
 	virtual void Stop() {}
 	virtual void Update(float deltaTime);
-	virtual void Render();
 
+	virtual void Render();
 	virtual void Release();
 	virtual void Reset();
 

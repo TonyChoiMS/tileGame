@@ -1,29 +1,30 @@
-#include "TileCell.h"
 #include "Sprite.h"
+#include "TileCell.h"
 #include "Component.h"
 
 TileCell::TileCell()
 {
+	//_sprite = NULL;
 	_position.x = _position.y = 0.0f;
 }
-
 TileCell::~TileCell()
 {
-
 }
-
-void TileCell::Init()
+//void TileCell::Init(Sprite* sprite)
+void TileCell::Init(int tileX, int tileY)
 {
-
+	_tilePostion.x = tileX;
+	_tilePostion.y = tileY;
+	//_sprite = sprite;
 }
-
 void TileCell::Update(float deltaTime)
 {
-
+	//_sprite->Update(deltaTime);
 }
-
 void TileCell::Render()
 {
+	//_sprite->SetPosition(_position.x , _position.y);
+	//_sprite->Render();
 	for (std::list<Component*>::iterator it = _componentList.begin();
 		it != _componentList.end(); it++)
 	{
@@ -34,29 +35,27 @@ void TileCell::Render()
 
 void TileCell::Release()
 {
-
+	//_sprite->Release();
 }
-
 void TileCell::Reset()
 {
-
+	//_sprite->Reset();
 }
 
 void TileCell::SetPosition(Point position)
 {
 	_position = position;
 }
-
 void TileCell::AddComponent(Component* component)
 {
 	_componentList.push_back(component);
+
 }
 
 void TileCell::RemoveComponent(Component* component)
 {
 	_componentList.remove(component);
 }
-
 std::list<Component*>TileCell::GetCollisionList()
 {
 	std::list<Component*> collisionList;
@@ -76,15 +75,16 @@ std::list<Component*>TileCell::GetCollisionList()
 bool TileCell::CanMove()
 {
 	// 타일셀이 가진 모든 컴포넌트리스트를 검사해서
-	// 하나라도 갈 수 없는 타일이 있으면 
+	// 하나라도 갈 수 없는 타일이 있으면
 	// false 리턴
 	for (std::list<Component*>::iterator it = _componentList.begin();
-		it != _componentList.end(); 
+		it != _componentList.end();
 		it++)
 	{
 		if (false == (*it)->CanMove())
+		{
 			return false;
+		}
 	}
 	return true;
-
 }

@@ -1,10 +1,11 @@
 #include <windows.h>
+
 #include "GameTimer.h"
 
 GameTimer::GameTimer()
 {
 	__int64 countPerSec;
-	
+
 	// cpu가 튀기는데 얼마나 걸리는지
 	QueryPerformanceFrequency((LARGE_INTEGER*)&countPerSec);
 	_secondsPerCount = 1.0 / (double)countPerSec;
@@ -13,7 +14,6 @@ GameTimer::~GameTimer()
 {
 
 }
-
 void GameTimer::Init()
 {
 	__int64 currentCounter;
@@ -22,7 +22,6 @@ void GameTimer::Init()
 	_prevCounter = currentCounter;
 	_deltaTime = 0.0;
 }
-
 void GameTimer::Update()
 {
 	__int64 currentCounter;
@@ -34,7 +33,6 @@ void GameTimer::Update()
 	_deltaTime = (currentCounter - _prevCounter) * _secondsPerCount;
 	_prevCounter = currentCounter;
 }
-
 double GameTimer::GetDeltaTime()
 {
 	return _deltaTime;

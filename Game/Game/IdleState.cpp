@@ -1,20 +1,19 @@
-#include "Character.h"
 #include "IdleState.h"
+#include "Character.h"
 
-
-IdleState::IdleState(Character* character) : State(character)
+IdleState::IdleState(Character* character)
+	:State(character)
 {
+	//_character = character;
 }
-
 IdleState::~IdleState()
 {
-}
 
+}
 void IdleState::Start()
 {
 	State::Start();
 }
-
 void IdleState::Update(float deltaTime)
 {
 	State::Update(deltaTime);
@@ -24,6 +23,5 @@ void IdleState::Update(float deltaTime)
 		_character->ChangeState(_nextState);
 		return;
 	}
-
 	_character->UpdateAI(deltaTime);
 }

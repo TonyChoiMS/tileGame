@@ -1,27 +1,23 @@
 #pragma once
-
 #include <d3dx9.h>
 #include <string>
-
 class Font
 {
 private:
 	ID3DXFont* _fontDX;
-	RECT _rect;
 	D3DCOLOR _color;
+	RECT _rect;
 	std::wstring _text;
-	std::wstring _fontName;
-	int _fontSize;
 
+	int _fontsize;
+	std::wstring _fontName;
 	int _width;
 	int _height;
-
 public:
-	Font(std::wstring fontName, int fontSize, D3DCOLOR fontColor);
+	Font(std::wstring fontname, int fontSize, D3DCOLOR fontColor);
 	~Font();
 
 	void Render();
-
 	void Release();
 	void Reset();
 

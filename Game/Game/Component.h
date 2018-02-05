@@ -1,8 +1,8 @@
 #pragma once
-
-#include <string>
+#include  <string>
 #include "GlobalTypes.h"
 #include "ComponentMessage.h"
+
 
 enum eComponentType
 {
@@ -10,23 +10,27 @@ enum eComponentType
 	CT_PLAYER,
 	CT_NPC,
 	CT_MONSTER,
-	CT_ITEM,
+	CT_ITEM
+
 };
 class Component
 {
+private:
+	bool _canMove;
 protected:
 	eComponentType _type;
 	std::wstring _name;
 	Point _position;
+	TilePoint _tilePosition;
 	bool _isLive;
 
 public:
 	Component(std::wstring name);
 	virtual ~Component();
-
 public:
-	// =0 을 붙이면, 추상 가상함수가 되기 때문에, Component를 상속받는
-	// 모든 객체는 무조건적으로 추상 가상함수를 선언과 정의를 해줘야한다.
+
+	// 추상 가상 함수로 0 을 선언해주면 컨포넌트를 
+	//상속받는 모든 클래스는 무조건 선언 및 정의 해줘야 한다.
 	virtual void Init(std::wstring textureFilename, std::wstring scriptFilename) = 0;
 	virtual void Deinit() = 0;
 	virtual void Update(float deltaTime) = 0;
@@ -35,29 +39,21 @@ public:
 	virtual void Release() = 0;
 	virtual void Reset() = 0;
 
-	void SetPosition(Point position) { _position = position; }
-	Point GetPosition() { return _position; }
-
-	eComponentType GetType() { return _type; }
-
-	bool IsLive() { return _isLive; }
-	void SetLive(bool isLive) { _isLive = isLive; }
-
-protected:
-	TilePoint _tilePosition;
-
 public:
+	void SetPosition(Point postion) { _position = postion; }
+	Point GetPosition() { return _position; }
 	TilePoint GetTilePosition() { return _tilePosition; }
-
-	// Message
+	//Message
 public:
 	virtual void ReceiveMsg(const sMessageParam& param);
 
-	//Move
-private:
-	bool _canMove;
-
 public:
+	// move
 	bool CanMove() { return _canMove; }
-	void SetCanMove(bool canMove) { _canMove = canMove; }
+	void SetCanMove(bool canMove) { _canMove = canMove; } // 지나간다.
+	eComponentType GetType() { return _type; }
+
+	//
+	bool IsLive() { return _isLive; }
+	void SetLive(bool isLive) { _isLive = isLive; }
 };

@@ -1,16 +1,14 @@
-#include "ComponentSystem.h"
-#include "Character.h"
 #include "AttackState.h"
-
-
-AttackState::AttackState(Character* character) : State(character)
+#include "Character.h"
+#include "ComponentSystem.h"
+AttackState::AttackState(Character* character)
+	:State(character)
 {
 }
-
 AttackState::~AttackState()
 {
-}
 
+}
 void AttackState::Start()
 {
 	State::Start();
@@ -26,8 +24,8 @@ void AttackState::Start()
 		param.attackPoint = _character->GetAttackPoint();
 		ComponentSystem::GetInstance()->SendMsg(param);
 	}
-}
 
+}
 void AttackState::Update(float deltaTime)
 {
 	State::Update(deltaTime);
@@ -37,7 +35,7 @@ void AttackState::Update(float deltaTime)
 		_character->ChangeState(_nextState);
 		return;
 	}
-
 	_character->ResetTarget();
 	_nextState = eStateType::ST_IDLE;
+	//_character->UpdateAI(deltaTime);
 }

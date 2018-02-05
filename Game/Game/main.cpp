@@ -1,17 +1,23 @@
 #include <Windows.h>
 #include <d3dx9.h>
 #include <list>
-#include "InputSystem.h"
-#include "ResourceManager.h"
-#include "ComponentSystem.h"
-#include "GameSystem.h"
+#include <ctime>
+
 #include "GameTimer.h"
-#include "Map.h"
-#include "NPC.h"
-#include "Monster.h"
-#include "Player.h"
-#include "RecoveryItem.h"
 #include "Sprite.h"
+#include "ResourceManager.h"
+#include "Map.h"
+#include "GameSystem.h"
+#include "ComponentSystem.h"
+#include "InputSystem.h"
+#include "RecoveryItem.h"
+#include "TrapItem.h"
+#include "TileCell.h"
+#include "NPC.h"
+#include "Player.h"
+#include "PathfinderPlayer.h"
+#include "PathfinderMonster.h"
+#include "Monster.h"
 #include "Font.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -51,7 +57,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 	// 프론트버퍼
 	// 윈도우 응용프로그램(창) 작동 스타일 만들고 등록 
 	WNDCLASS wc;
-
+	
 	wc.style = CS_HREDRAW | CS_VREDRAW;						// 창의 스타일 지정
 	wc.lpfnWndProc = WndProc;								// 윈도우 프로시저
 	wc.cbClsExtra = 0;
@@ -71,14 +77,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 
 	// 윈도우 스타일( 창모드와 풀스크린에서 옵션 값이 다름)
 	DWORD style = isWindow ? WS_OVERLAPPEDWINDOW : WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP;
-	//if (isWindow)
-	//{
-	//	style = WS_OVERLAPPEDWINDOW;					// 모든 창 옵션을 다 가져옴.
-	//}
-	//else
-	//{
-	//	style = WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP;
-	//}
+	if (isWindow)
+	{
+		style = WS_OVERLAPPEDWINDOW;					// 모든 창 옵션을 다 가져옴.
+	}
+	else
+	{
+		style = WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP;
+	}
 	// 윈도우 창을 생성하고 핸들을 얻음 (id)
 	HWND hWnd = CreateWindow(
 		// 문자열 앞의 L은 문자열을 유니코드로 변경해주는 키워드
@@ -90,7 +96,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 		0,									// 부모 창이 있을 시, 부모창의 핸들
 		0,									// 메뉴 핸들
 		hInstance,							// 만들어지는 윈도우 창을 사용할 응용 프로그램 핸들 세팅
-		0
+		0									
 	);
 
 	if (NULL == hWnd)
@@ -119,7 +125,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 		);
 	}
 	///////////////////윈도우 창을 띄우기 위한 코드 /////////////////////////////////////
-
+	
 	/*
 	// 1. 메시지 배분
 	게임에는 권장되지 않는 코드
@@ -178,7 +184,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 		&device3d						// 만들어진 Direct3d
 	);
 
-	if (FAILED(hr))
+	if (FAILED(hr)) 
 	{
 		// 0 은 어떤 윈도우든 가리지않고 띄우겠다.
 		MessageBox(0, L"Failed cCreateDevice", L"Error", MB_OK);
@@ -202,14 +208,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 
 	std::list<Component*> stageComponentList;
 
-	Map* map = new Map(L"Map");
-	map->Init(L"MapSprite.png", L"MapData_Layer");
-	stageComponentList.push_back(map);
 
-	// 1. 캐릭터 생성
-	Player* character = new Player(L"player");
-	character->Init(L"character_sprite.png", L"player");
-	stageComponentList.push_back(character);
+	Map* map = new Map(L"Map");
+	map->Init(L"MapSprite.png", L"PathMap_Layer");
+	stageComponentList.push_back(map);
 
 	// 회복 아이템 배치
 	for (int i = 0; i < 10; i++)
@@ -221,30 +223,63 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 		stageComponentList.push_back(item);
 	}
 
+	// 함정
+	for (int i = 0; i < 15; i++)
+	{
+		WCHAR name[256];
+		wsprintf(name, L"trap_item_%d", i);
+		TrapItem* item = new TrapItem(name);
+		item->Init(L"item_pack.png", L"trap_item");
+		stageComponentList.push_back(item);
+	}
+	// 캐릭터 생성
+
+	//Character* character = new Player(L"player");
+	Character* character = new PathfinderPlayer(L"player");
+	character->Init(L"character_sprite.png", L"player");
+	stageComponentList.push_back(character);
+
+	//Monster
+	Monster* monster = new PathfinderMonster(L"monster");
+	monster->Init(L"monster_sprite_pack.png", L"monster");
+	stageComponentList.push_back(monster);
+
 	// NPC
+	/*
+	for (int i = 0; i < 30;i++)
+	{
+	WCHAR name[256];
+	wsprintf(name, L"npc_%d", i);
+	Character* npc = new NPC(name);
+	npc->Init(L"character_sprite_pack.png", L"npc");
+	stageComponentList.push_back(npc);
+	}
+
 	for (int i = 0; i < 10; i++)
 	{
-		WCHAR name[256];
-		wsprintf(name, L"npc_%d", i);
-		Character* npc = new NPC(name);
-		npc->Init(L"character_sprite_pack.png", L"npc");
-		stageComponentList.push_back(npc);
-	}
+	WCHAR name[256];
+	wsprintf(name, L"monster_%d", i);
+	Monster* monster = new Monster(name);
+	monster->Init(L"monster_sprite_pack.png", L"monster");
+	stageComponentList.push_back(monster);
 
-	for (int i = 0; i < 20; i++)
-	{
-		WCHAR name[256];
-		wsprintf(name, L"monster_%d", i);
-		Monster* monster = new Monster(name);
-		monster->Init(L"monster_sprite_pack.png", L"npc");
-		stageComponentList.push_back(monster);
 	}
-
-	map->SetViewer(character);
+	*/
+	//TileCell* targetTileCell = map->GetTileCell(monster->GetTilePosition());
+	//character->SetTargetTileCell(targetTileCell);
+	// mapViewer 생성
+	//map->SetViewer(character);
+	TilePoint tilePosition;
+	tilePosition.x = map->GetWidth() / 2;
+	tilePosition.y = map->GetHeight() / 2 + 1;
+	TileCell* tileCell = map->GetTileCell(tilePosition);
+	Component* midTileObject = tileCell->GetComponentList().front();
+	map->SetViewer(midTileObject);
 
 	// https://opengameart.org/
 	// 이미지 파일에서 텍스쳐 로드
 	// 이동, 회전, 스케일 행렬을 사용
+
 	// FPS 결정 ( 60 fps )
 	float frameTime = 1.0f / 60.0f;
 	float frameDuration = 0.0f;
@@ -286,10 +321,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 			if (frameTime <= frameDuration)
 			{
 				frameDuration = 0;
-
+				
 				// DirectX 디바이스를 이용해서 화면에 색을 채우고
 				// 보여준다.
-				device3d->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 128, 0), 0.0F, 0);
+				device3d->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 128, 0),  0.0F, 0);
 				{
 					device3d->BeginScene();			// 지금부터 Scene을 그리기 시작
 					{
@@ -302,7 +337,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 						{
 							map->Render();
 							//testFont->Render();
-
+							
 						}
 						spriteDX->End();
 					}
@@ -349,8 +384,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 							{
 								hr = direct3d->CreateDevice(
 									D3DADAPTER_DEFAULT,
-									D3DDEVTYPE_HAL,
-									hWnd,
+									D3DDEVTYPE_HAL,					
+									hWnd,							
 									D3DCREATE_HARDWARE_VERTEXPROCESSING,
 									&d3dpp,
 									&device3d
@@ -391,7 +426,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 	character->Deinit();
 	delete character;
 	character = NULL;*/
-
+	
 	ResourceManager::GetInstance()->RemoveAllTexture();
 	if (spriteDX)
 	{
@@ -416,10 +451,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 // 윈도우 프로그램을 실행시키는 핵심 코드
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	int x = 0;
+	int y = 0;
 	// 메시지 처리
 	switch (msg)
 	{
 	case WM_LBUTTONDOWN:
+		x = LOWORD(lParam);
+		y = HIWORD(lParam);
+		InputSystem::GetInstance()->MouseDown(x, y);
+		return 0;
+	case WM_LBUTTONUP:
+		InputSystem::GetInstance()->MouseUp();
 		//MessageBox(0, L"Hello World", L"Hello", MB_OK);
 		return 0;
 	case WM_KEYDOWN:
@@ -439,3 +482,4 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	// 지정한 키가 아닐 경우 Window OS에게 알아서 처리해달라는 함수
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
+

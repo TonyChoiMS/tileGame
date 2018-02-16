@@ -1,20 +1,23 @@
 #pragma once
+
 #include <d3dx9.h>
 
 class GameSystem
 {
 private:
 	static GameSystem* _instance;
+
 public:
 	static GameSystem* GetInstance();
+
 private:
 	GameSystem() {}
 	~GameSystem() {}
+
 	// Windows
 private:
 	float _clientWidth;
 	float _clientHeight;
-
 
 public:
 	float GetClientWidth() { return _clientWidth; }
@@ -34,5 +37,4 @@ public:
 
 	ID3DXSprite* GetSpriteDX() { return _spriteDX; }
 	void SetSpriteDX(ID3DXSprite* spriteDX) { _spriteDX = spriteDX; }
-
 };

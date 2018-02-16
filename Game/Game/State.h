@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 #include <string>
 
@@ -21,8 +22,8 @@ public:
 	virtual void Start();
 	virtual void Stop() {}
 	virtual void Update(float deltaTime);
-
 	virtual void Render();
+
 	virtual void Release();
 	virtual void Reset();
 

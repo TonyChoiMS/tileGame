@@ -1,6 +1,5 @@
 #include <fstream>		// 파일 입출력 파일 라이브러리 (std)
 
-
 #include "Texture.h"
 #include "ResourceManager.h"
 
@@ -17,11 +16,10 @@ ResourceManager* ResourceManager::GetInstance()
 
 ResourceManager::ResourceManager()
 {
-
 }
+
 ResourceManager::~ResourceManager()
 {
-
 }
 
 Texture* ResourceManager::FindTexture(std::wstring fileName)
@@ -33,7 +31,6 @@ Texture* ResourceManager::FindTexture(std::wstring fileName)
 	std::map<std::wstring, Texture*>::iterator it = _textureMap.find(filePath);
 
 	// 있으면 있는걸 돌려주고 
-
 	if (it != _textureMap.end())
 	{
 		return it->second;
@@ -80,6 +77,7 @@ void ResourceManager::RemoveAllTexture()
 		it != _textureMap.end(); it++)
 	{
 		Texture* tex = it->second;
+		tex->Release();
 		delete tex;
 	}
 	_textureMap.clear();

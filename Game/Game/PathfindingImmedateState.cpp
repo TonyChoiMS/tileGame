@@ -1,11 +1,10 @@
 #include "Character.h"
 #include "PathfindingImmedateState.h"
 
-PathfindingImmedateState::PathfindingImmedateState(Character* character)
-	:PathfindingState(character)
+PathfindingImmedateState::PathfindingImmedateState(Character* character) : PathfindingState(character)
 {
-
 }
+
 PathfindingImmedateState::~PathfindingImmedateState()
 {
 }
@@ -17,9 +16,7 @@ void PathfindingImmedateState::Start()
 	while (0 != _pathfindingQueue.size())
 	{
 		if (eUpdateState::BUILD_PATH == _updateState)
-		{
 			break;
-		}
 		UpdatePathfinding();
 	}
 

@@ -1,29 +1,25 @@
 #include "DefenseState.h"
 #include "Character.h"
-DefenseState::DefenseState(Character* character)
-	:State(character)
-{
 
+DefenseState::DefenseState(Character* character) : State(character)
+{
 }
+
 DefenseState::~DefenseState()
 {
-
 }
+
 void DefenseState::Start()
 {
+	// Initialize State member variable
 	State::Start();
 
-	//int attackPoint = param.attackPoint;
 	int damagePoint = _character->GetDamagePoint();
-	//_hp -= attackPoint;
-	//if (0 >_hp)
 	_character->DecreaseHP(damagePoint);
 	if (false == _character->IsLive())
 	{
-		// 죽었을 때 캐릭터는 지
-		//_isLive = false;
-		//SetCanMove(true);
-		_character->SetCanMove(true); // 
+		// 죽었을 때 캐릭터는 움직일 수 없다.
+		_character->SetCanMove(true);
 		_character->MoveStop();
 		ChangeState(eStateType::ST_DIE);
 	}
@@ -31,9 +27,8 @@ void DefenseState::Start()
 	{
 		ChangeState(eStateType::ST_IDLE);
 	}
-
-
 }
+
 void DefenseState::Update(float deltaTime)
 {
 	State::Update(deltaTime);

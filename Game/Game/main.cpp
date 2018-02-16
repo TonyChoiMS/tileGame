@@ -208,7 +208,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 
 	std::list<Component*> stageComponentList;
 
-
 	Map* map = new Map(L"Map");
 	map->Init(L"MapSprite.png", L"PathMap_Layer");
 	stageComponentList.push_back(map);
@@ -232,8 +231,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 		item->Init(L"item_pack.png", L"trap_item");
 		stageComponentList.push_back(item);
 	}
-	// 캐릭터 생성
 
+	// 캐릭터 생성
 	//Character* character = new Player(L"player");
 	Character* character = new PathfinderPlayer(L"player");
 	character->Init(L"character_sprite.png", L"player");
@@ -271,7 +270,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 	//map->SetViewer(character);
 	TilePoint tilePosition;
 	tilePosition.x = map->GetWidth() / 2;
-	tilePosition.y = map->GetHeight() / 2 + 1;
+	tilePosition.y = map->GetHeight() / 2 + 2;
 	TileCell* tileCell = map->GetTileCell(tilePosition);
 	Component* midTileObject = tileCell->GetComponentList().front();
 	map->SetViewer(midTileObject);
@@ -324,7 +323,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 				
 				// DirectX 디바이스를 이용해서 화면에 색을 채우고
 				// 보여준다.
-				device3d->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 128, 0),  0.0F, 0);
+				device3d->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(124, 124, 124),  0.0F, 0);
 				{
 					device3d->BeginScene();			// 지금부터 Scene을 그리기 시작
 					{
@@ -336,7 +335,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 						// 2D는 이 영역에서 그려줌
 						{
 							map->Render();
-							//testFont->Render();
 							
 						}
 						spriteDX->End();

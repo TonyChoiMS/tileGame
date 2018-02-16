@@ -10,13 +10,14 @@ enum eComponentType
 	CT_PLAYER,
 	CT_NPC,
 	CT_MONSTER,
-	CT_ITEM
-
+	CT_ITEM,
 };
+
 class Component
 {
 private:
 	bool _canMove;
+
 protected:
 	eComponentType _type;
 	std::wstring _name;

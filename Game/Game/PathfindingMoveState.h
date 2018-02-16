@@ -3,11 +3,11 @@
 
 class Character;
 
-class PathfindingMoveState
-	:public State
+class PathfindingMoveState : public State
 {
 private:
 	float _movingDuration;
+
 public:
 	PathfindingMoveState(Character* character);
 	~PathfindingMoveState();
@@ -17,5 +17,5 @@ public:
 	void Stop();
 	void Update(float deltaTime);
 
-	eDirection GetDirection(TilePoint to, TilePoint from);
+	eDirection GetDirection(TilePoint toPosition, TilePoint fromPosition);
 };

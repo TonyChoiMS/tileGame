@@ -8,12 +8,13 @@ class Texture;
 
 class ResourceManager
 {
-
 	// Singleton
 private:
 	static ResourceManager* _instance;
+
 public:
 	static ResourceManager* GetInstance();
+
 private:
 	ResourceManager();
 	~ResourceManager();
@@ -21,14 +22,15 @@ private:
 	//Texture
 private:
 	std::map<std::wstring, Texture*> _textureMap;
+
 public:
 	Texture* FindTexture(std::wstring fileName);
+	void RemoveAllTexture();
+
 private:
 	std::map<std::wstring, std::vector<std::string>> _scriptMap;
+
 	//Script
 public:
 	std::vector<std::string>FindScript(std::wstring fileName);
-public:
-	void RemoveAllTexture();
-
 };

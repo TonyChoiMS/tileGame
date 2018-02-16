@@ -8,9 +8,18 @@ class Character;
 class TileCell;
 class Map;
 
-class PathfindingState
-	:public State
+class PathfindingState : public State
 {
+public:
+	PathfindingState(Character* character);
+	~PathfindingState();
+
+public:
+	void Start();
+	void Stop();
+	void Update(float deltaTime);
+
+	//PathFinding
 protected:
 	struct sPathCommand
 	{
@@ -39,19 +48,11 @@ protected:
 
 	TileCell* _reverseTileCell;
 
+	Map* _map;
+
 	void UpdatePathfinding();
 	void UpdateBuildPath();
 
-	Map* _map;
-public:
-	PathfindingState(Character* character);
-	~PathfindingState();
-public:
-	void Start();
-	void Stop();
-	void Update(float deltaTime);
-
-	// pathfinding
 	TilePoint GetSearchTilePositionByDirection(TilePoint tilePosition, eDirection direction);
 
 	float CalcSimpleHeuristic(TileCell* current, TileCell* search, TileCell* goal);
@@ -60,5 +61,4 @@ public:
 
 	void CheckTestMark(TileCell* tileCell);
 	void CheckBuildTestMark(TileCell* tileCell);
-
 };

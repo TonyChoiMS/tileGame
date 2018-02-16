@@ -16,7 +16,7 @@ void TrapItem::Init(std::wstring textureFilename, std::wstring scriptFilename)
 {
 	// 맵상에 랜덤한 위치에 세팅
 	{
-		Map* map = (Map*)ComponentSystem::GetInstance()->FindCompoent(L"Map");
+		Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(L"Map");
 		if (NULL != map)
 		{
 			_tilePosition.x = rand() % map->GetWidth();
@@ -69,7 +69,7 @@ void TrapItem::ReceiveMsg(const sMessageParam& param)
 		ComponentSystem::GetInstance()->SendMsg(msg);
 
 		_isLive = false;
-		Map* map = (Map*)ComponentSystem::GetInstance()->FindCompoent(L"Map");
+		Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(L"Map");
 		if (NULL != map)
 		{
 			map->ResetTileComponent(_tilePosition, this);

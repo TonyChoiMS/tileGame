@@ -1,10 +1,10 @@
 #pragma once
+
 #include "PathfindingState.h"
 
 class Character;
 
-class PathfindingImmedateState
-	:public PathfindingState
+class PathfindingImmedateState : public PathfindingState
 {
 public:
 	PathfindingImmedateState(Character* character);

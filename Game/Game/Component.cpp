@@ -1,5 +1,6 @@
 #include "Component.h"
 #include "ComponentSystem.h"
+
 Component::Component(std::wstring name)
 {
 	_type = eComponentType::CT_DEFAULT;
@@ -9,11 +10,10 @@ Component::Component(std::wstring name)
 	_isLive = true;
 
 	ComponentSystem::GetInstance()->AddComponent(_name, this);
-
 }
+
 Component::~Component()
 {
-
 }
 
 void Component::ReceiveMsg(const sMessageParam& param)

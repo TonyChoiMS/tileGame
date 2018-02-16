@@ -2,15 +2,14 @@
 #include "Character.h"
 #include "PathfindingMoveState.h"
 
-PathfindingMoveState::PathfindingMoveState(Character* character)
-	:State(character)
+PathfindingMoveState::PathfindingMoveState(Character* character) : State(character)
 {
-
 }
+
 PathfindingMoveState::~PathfindingMoveState()
 {
-
 }
+
 void PathfindingMoveState::Start()
 {
 	State::Start();
@@ -19,11 +18,13 @@ void PathfindingMoveState::Start()
 	// 맨 마지막에 들어간 타일셀은 버린다.
 	TileCell* tileCell = _character->PopPathfindingCell();
 }
+
 void PathfindingMoveState::Stop()
 {
 	State::Stop();
 	_character->MoveStop();
 }
+
 void PathfindingMoveState::Update(float deltaTime)
 {
 	// 스택을 사용
@@ -58,28 +59,18 @@ void PathfindingMoveState::Update(float deltaTime)
 	{
 		_nextState = eStateType::ST_IDLE;
 	}
-	_movingDuration += 0.0003f;
+	_movingDuration += deltaTime;
 }
 
 eDirection PathfindingMoveState::GetDirection(TilePoint to, TilePoint from)
 {
 	if (from.x < to.x)
-	{
 		return eDirection::RIGHT;
-	}
 	if (from.x > to.x)
-	{
 		return eDirection::LEFT;
-	}
-
 	if (from.y < to.y)
-	{
 		return eDirection::DOWN;
-	}
 	if (from.y > to.y)
-	{
 		return eDirection::UP;
-	}
 	return eDirection::NONE;
-
 }

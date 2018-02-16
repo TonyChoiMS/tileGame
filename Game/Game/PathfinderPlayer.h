@@ -1,8 +1,8 @@
 #pragma once
+
 #include "Player.h"
 
-class PathfinderPlayer
-	:public Player
+class PathfinderPlayer : public Player
 {
 public:
 	PathfinderPlayer(std::wstring name);

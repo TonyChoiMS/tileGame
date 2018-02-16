@@ -9,21 +9,19 @@
 
 
 
-Map::Map(std::wstring name)
-	:Component(name)
+Map::Map(std::wstring name) : Component(name)
 {
-
 }
+
 Map::~Map()
 {
-
 }
+
 void Map::Init(std::wstring textureFilename, std::wstring scriptFilename)
 {
 	_width = mapWidth;
 	_height = mapHeight;
 
-	_tileSize = 0;
 	// Sprite List 구성
 	{
 		int srcX = 0;
@@ -42,24 +40,6 @@ void Map::Init(std::wstring textureFilename, std::wstring scriptFilename)
 			srcY += spriteSize;
 		}
 	}
-
-	// 이부분이 스크립트로 대체
-	/*
-	// 타일맵 인덱스 구성 -> 스크립트화
-	int index = 0;
-	int testTileMapIndex[mapHeight][mapWidth];
-	for (int y = 0; y < _height; y++)
-	{
-	for (int x = 0; x < _width; x++)
-	{
-	//testTileMapIndex[y][x] = rand() % _spriteList.size();
-	testTileMapIndex[y][x] = index;
-	index++;
-	}
-	}
-	// --------------------------------------------------------
-	*/
-
 	// 타일 맵 인덱스 구성 -> 스크립트를 바탕으로 스프라이트를 생성
 	_tileArray.clear();
 
@@ -96,51 +76,9 @@ void Map::Update(float deltaTime)
 	}
 	UpdateViewer(deltaTime);
 }
+
 void Map::Render()
 {
-	/*
-	int startTileX = _startX;
-	int startTileY = _startY;
-	int endTileX = startTileX + _renderMapWidth;
-	int endTileY = startTileY + _renderMapHeight;
-
-	if (mapWidth < endTileX)
-	{
-	endTileX = _width;
-	}
-	if (mapHeight < endTileY)
-	{
-	endTileY = _height;
-	}
-
-	//float posX = 0.0f;
-	//float posY = 0.0f;
-
-	Point position;
-	position.x = position.y = 0.0f;
-	_tileSize = 32;
-
-	for (int y = startTileY; y < endTileY; y++)
-	{
-	if (0 <= y)
-	{
-	for (int x = startTileX; x < endTileX; x++)
-	{
-	if (0 <= x)
-	{
-	// _sprtieArray -> _tileArray 로 변경
-	_tileArray[y][x]->SetPosition(position);
-	_tileArray[y][x]->Render();
-	}
-	position.x += (_tileSize);
-
-	}
-	}
-	position.x = 0.0f;
-	position.y += (_tileSize);
-	}
-	*/
-
 	int midTileCountX = _renderMapWidth / 2;
 	int midTileCountY = _renderMapHeight / 2;
 
@@ -151,13 +89,9 @@ void Map::Render()
 	int endTileY = startTileY + _renderMapHeight + 1;
 
 	if (_width < endTileX)
-	{
 		endTileX = _width;
-	}
 	if (_height < endTileY)
-	{
 		endTileY = _height;
-	}
 
 	Point renderPosition;
 	renderPosition.x = renderPosition.y = 0.0f;
@@ -174,15 +108,16 @@ void Map::Render()
 					_tileArray[y][x]->SetPosition(renderPosition);
 					_tileArray[y][x]->Render();
 				}
-				renderPosition.x += (_tileSize);
+				renderPosition.x += _tileSize;
 
 			}
 		}
 		renderPosition.x = 0.0f;
-		renderPosition.y += (_tileSize);
+		renderPosition.y += _tileSize;
 	}
 
 }
+
 void Map::Release()
 {
 	for (int y = 0; y < _height; y++)
@@ -190,11 +125,11 @@ void Map::Release()
 		for (int x = 0; x < _width; x++)
 		{
 			// _sprtieArray -> _tileArray 로 변경
-
 			_tileArray[y][x]->Release();
 		}
 	}
 }
+
 void Map::Reset()
 {
 	for (int y = 0; y < _height; y++)
@@ -202,31 +137,9 @@ void Map::Reset()
 		for (int x = 0; x < _width; x++)
 		{
 			// _sprtieArray -> _tileArray 로 변경
-
 			_tileArray[y][x]->Reset();
 		}
 	}
-}
-
-Point Map::GetPosition(int tileX, int tileY)
-{
-	Point point;
-	point.x = tileX * _tileSize;
-	point.y = tileY * _tileSize;
-
-	return point;
-
-}
-
-void Map::setTileComponent(TilePoint tilePosition, Component* component)
-{
-	_tileArray[tilePosition.y][tilePosition.x]->AddComponent(component);
-}
-
-void Map::ResetTileComponent(TilePoint tilePosition, Component* component)
-{
-	_tileArray[tilePosition.y][tilePosition.x]->RemoveComponent(component);
-
 }
 
 void Map::CreateTiles(std::wstring scriptFilename)
@@ -243,10 +156,10 @@ void Map::CreateTiles(std::wstring scriptFilename)
 		char* token;
 		//  첫 째 라인은 맵 크기 정보
 		strcpy(record, recordList[0].c_str());
-		token = strtok(record, ",");				// 첫번 째 칸을 스킵 : mapSize
-		token = strtok(NULL, ",");					// 두번 째 실제 가로 크기 : 16
+		token = strtok(record, ",");		// 첫번 째 칸을 스킵 : mapSize
+		token = strtok(NULL, ",");			// 두번 째 실제 가로 크기 : 16
 		_width = atoi(token);
-		token = strtok(NULL, ",");					// 세번 째 실제 가로 크기 : 10
+		token = strtok(NULL, ",");			// 세번 째 실제 가로 크기 : 10
 		_height = atoi(token);
 
 		// 둘 째 라인은 스킵
@@ -258,18 +171,14 @@ void Map::CreateTiles(std::wstring scriptFilename)
 			strcpy(record, recordList[line].c_str());
 			token = strtok(record, ",");
 
-			//std::vector<Sprite*> rowList;
 			std::vector<TileCell*> rowList;
 			for (int x = 0; x < _width; x++)
 			{
 				// _spriteArray 구성
-				int spriteIndex = atoi(token);				// <- 스크립트로 대체된 부분
-															//Sprite* sprite = new Sprite(device3d, spriteDX);
-				Sprite* sprite = _spriteList[spriteIndex];			// <- 중요
+				int spriteIndex = atoi(token);	// <- 스크립트로 대체된 부분
+				Sprite* sprite = _spriteList[spriteIndex];		// <- 중요
 
-																	//rowList.push_back(sprite);				// 3. 가로열 배열에 내용 채움
 				TileCell* tileCell = new TileCell();
-				//tileCell->Init(sprite);
 				tileCell->Init(x, y);
 
 				// 타일 오브젝트 생성
@@ -281,11 +190,9 @@ void Map::CreateTiles(std::wstring scriptFilename)
 				rowList.push_back(tileCell);
 				token = strtok(NULL, ",");
 			}
-			//_spriteArray.puch_bakc(rowList);
 			_tileArray.push_back(rowList);		// 4. 가로를 리스트에 넣어서 세로 완성
 			line++;
 		}
-
 	}
 
 	// 2 층 Layer02
@@ -300,10 +207,10 @@ void Map::CreateTiles(std::wstring scriptFilename)
 		char* token;
 		//  첫 째 라인은 맵 크기 정보
 		strcpy(record, recordList[0].c_str());
-		token = strtok(record, ",");				// 첫번 째 칸을 스킵 : mapSize
-		token = strtok(NULL, ",");					// 두번 째 실제 가로 크기 : 16
+		token = strtok(record, ",");		// 첫번 째 칸을 스킵 : mapSize
+		token = strtok(NULL, ",");			// 두번 째 실제 가로 크기 : 16
 		_width = atoi(token);
-		token = strtok(NULL, ",");					// 세번 째 실제 가로 크기 : 10
+		token = strtok(NULL, ",");			// 세번 째 실제 가로 크기 : 10
 		_height = atoi(token);
 
 		// 둘 째 라인은 스킵
@@ -315,18 +222,16 @@ void Map::CreateTiles(std::wstring scriptFilename)
 			strcpy(record, recordList[line].c_str());
 			token = strtok(record, ",");
 
-			//std::vector<Sprite*> rowList;
 			std::vector<TileCell*> rowList = _tileArray[y];
 			for (int x = 0; x < _width; x++)
 			{
 				// _spriteArray 구성
-				int spriteIndex = atoi(token);				// <- 스크립트로 대체된 부분
+				int spriteIndex = atoi(token);	// <- 스크립트로 대체된 부분
 				if (0 <= spriteIndex)
 				{
 					Sprite* sprite = _spriteList[spriteIndex];
 
 					TileCell* tileCell = rowList[x];
-					//tileCell->Init();
 
 					// 타일 오브젝트 생성
 					WCHAR name[256];
@@ -339,11 +244,9 @@ void Map::CreateTiles(std::wstring scriptFilename)
 
 				token = strtok(NULL, ",");
 			}
-			//_spriteArray.puch_bakc(rowList);
 			_tileArray.push_back(rowList);		// 4. 가로를 리스트에 넣어서 세로 완성
 			line++;
 		}
-
 	}
 	// 타일 맵 인덱스를 이용해서 맵 구성
 	/*
@@ -400,10 +303,10 @@ void Map::CreateMazeTiles(std::wstring scriptFilename)
 		char* token;
 		//  첫 째 라인은 맵 크기 정보
 		strcpy(record, recordList[0].c_str());
-		token = strtok(record, ",");				// 첫번 째 칸을 스킵 : mapSize
-		token = strtok(NULL, ",");					// 두번 째 실제 가로 크기 : 16
+		token = strtok(record, ",");		// 첫번 째 칸을 스킵 : mapSize
+		token = strtok(NULL, ",");			// 두번 째 실제 가로 크기 : 16
 		_width = atoi(token);
-		token = strtok(NULL, ",");					// 세번 째 실제 가로 크기 : 10
+		token = strtok(NULL, ",");			// 세번 째 실제 가로 크기 : 10
 		_height = atoi(token);
 
 		// 둘 째 라인은 스킵
@@ -420,13 +323,10 @@ void Map::CreateMazeTiles(std::wstring scriptFilename)
 			for (int x = 0; x < _width; x++)
 			{
 				// _spriteArray 구성
-				int spriteIndex = atoi(token);				// <- 스크립트로 대체된 부분
-															//Sprite* sprite = new Sprite(device3d, spriteDX);
-				Sprite* sprite = _spriteList[spriteIndex];			// <- 중요
+				int spriteIndex = atoi(token);	// <- 스크립트로 대체된 부분
+				Sprite* sprite = _spriteList[spriteIndex];	// <- 중요
 
-																	//rowList.push_back(sprite);				// 3. 가로열 배열에 내용 채움
 				TileCell* tileCell = new TileCell();
-				//tileCell->Init(sprite);
 				tileCell->Init(x, y);
 
 				// 타일 오브젝트 생성
@@ -438,13 +338,13 @@ void Map::CreateMazeTiles(std::wstring scriptFilename)
 				rowList.push_back(tileCell);
 				token = strtok(NULL, ",");
 			}
-			//_spriteArray.puch_bakc(rowList);
 			_tileArray.push_back(rowList);		// 4. 가로를 리스트에 넣어서 세로 완성
 			line++;
 		}
 
 	}
 	
+	/*
 	// 2 층 Layer02
 	{
 		std::wstring layerScriptName = scriptFilename;
@@ -501,6 +401,7 @@ void Map::CreateMazeTiles(std::wstring scriptFilename)
 		}
 
 	}
+	*/
 	
 
 	// 기준이 되는 블럭을 심는다.
@@ -598,7 +499,6 @@ void Map::CreateMazeTiles(std::wstring scriptFilename)
 				}
 			}
 		}
-	//	_tileArray.push_back(rowList);
 	}
 }
 
@@ -634,45 +534,49 @@ void Map::SetViewer(Component* component)
 	_viewer = component;
 	_prevViewTilePosition = _viewer->GetTilePosition();
 }
+
 void Map::UpdateViewer(float deltaTime)
 {
 	if (NULL == _viewer)
-	{
 		return;
-	}
 
 	if (_prevViewTilePosition.x != _viewer->GetTilePosition().x ||
 		_prevViewTilePosition.y != _viewer->GetTilePosition().y)
 	{
 		if (_prevViewTilePosition.x < _viewer->GetTilePosition().x)
-		{
 			MoveRight();
-		}
 		if (_viewer->GetTilePosition().x < _prevViewTilePosition.x)
-		{
 			MoveLeft();
-		}
 		if (_prevViewTilePosition.y < _viewer->GetTilePosition().y)
-		{
 			MoveDown();
-		}
 		if (_viewer->GetTilePosition().y < _prevViewTilePosition.y)
-		{
 			MoveUp();
-		}
+
 		_prevViewTilePosition = _viewer->GetTilePosition();
 	}
 }
 
-bool Map::CanMoveTile(TilePoint tilePosition)
+void Map::setTileComponent(TilePoint tilePosition, Component* component)
 {
-	if (0 <= tilePosition.x && tilePosition.x < GetWidth() &&
-		0 <= tilePosition.y && tilePosition.y < GetHeight())
-	{
-		return GetTileCell(tilePosition)->CanMove();
-	}
-	return false;
+	_tileArray[tilePosition.y][tilePosition.x]->AddComponent(component);
 }
+
+void Map::ResetTileComponent(TilePoint tilePosition, Component* component)
+{
+	_tileArray[tilePosition.y][tilePosition.x]->RemoveComponent(component);
+
+}
+
+Point Map::GetPosition(int tileX, int tileY)
+{
+	Point point;
+	point.x = tileX * _tileSize;
+	point.y = tileY * _tileSize;
+
+	return point;
+
+}
+
 TileCell* Map::GetTileCell(TilePoint tilePosition)
 {
 	return _tileArray[tilePosition.y][tilePosition.x];
@@ -686,21 +590,13 @@ Component* Map::FindComponentInRange(Component* finder, int range, std::vector<e
 	int rangeMaxY = finder->GetTilePosition().y + range;
 
 	if (rangeMinX < 0)
-	{
 		rangeMinX = 0;
-	}
 	if (GetWidth() <= rangeMaxX)
-	{
 		rangeMaxX = GetWidth() - 1;
-	}
 	if (rangeMinY < 0)
-	{
 		rangeMinY = 0;
-	}
 	if (GetHeight() <= rangeMaxY)
-	{
 		rangeMaxY = GetHeight() - 1;
-	}
 
 	Component* findComponent = NULL;
 	for (int y = rangeMinY; y < rangeMaxY; y++)
@@ -729,14 +625,6 @@ Component* Map::FindComponentInRange(Component* finder, int range, std::vector<e
 								return component;
 							}
 						}
-						/*
-						if (eComponentType::CT_NPC == component->GetType() ||
-						eComponentType::CT_PLAYER == component->GetType())
-						{
-						findComponent = component;
-						break;
-						}
-						*/
 					}
 				}
 			}
@@ -744,6 +632,7 @@ Component* Map::FindComponentInRange(Component* finder, int range, std::vector<e
 	}
 	return NULL;
 }
+
 std::vector<Component*> Map::GetTileCollisionList(TilePoint tilePosition)
 {
 	std::vector<Component*> collisionArray;
@@ -761,6 +650,16 @@ std::vector<Component*> Map::GetTileCollisionList(TilePoint tilePosition)
 		collisionArray.push_back((*it));
 	}
 	return collisionArray;
+}
+
+bool Map::CanMoveTile(TilePoint tilePosition)
+{
+	if (0 <= tilePosition.x && tilePosition.x < GetWidth() &&
+		0 <= tilePosition.y && tilePosition.y < GetHeight())
+	{
+		return GetTileCell(tilePosition)->CanMove();
+	}
+	return false;
 }
 
 Component* Map::FindItemInTile(TilePoint tilePosition)
@@ -806,9 +705,7 @@ void Map::ResetPathfinding()
 			tilePosition.x = x;
 			tilePosition.y = y;
 			GetTileCell(tilePosition)->ResetPathfinding();
-
 		}
-
 	}
 }
 
@@ -817,28 +714,20 @@ TileCell* Map::FindTileCellByMousePosition(int MouseX, int MouseY)
 	int midX = GameSystem::GetInstance()->GetClientWidth() / 2;
 	int midY = GameSystem::GetInstance()->GetClientHeight() / 2;
 
-	int minX = _viewer->GetTilePosition().x - (midX / _tileSize) - 4;
-	int maxX = _viewer->GetTilePosition().x + (midX / _tileSize) + 4;
+	int minX = _viewer->GetTilePosition().x - (midX / _tileSize) - 2;
+	int maxX = _viewer->GetTilePosition().x + (midX / _tileSize) + 2;
 
-	int minY = _viewer->GetTilePosition().y - (midY / _tileSize) - 4;
-	int maxY = _viewer->GetTilePosition().y + (midY / _tileSize) + 4;
+	int minY = _viewer->GetTilePosition().y - (midY / _tileSize) - 2;
+	int maxY = _viewer->GetTilePosition().y + (midY / _tileSize) + 2;
 
 	if (minX < 0)
-	{
 		minX = 0;
-	}
 	if (_width < maxX)
-	{
 		maxX = _width;
-	}
 	if (minY < 0)
-	{
 		minY = 0;
-	}
 	if (_height < maxY)
-	{
 		maxY = _height;
-	}
 
 	for (int y = minY; y < maxY; y++)
 	{
@@ -858,12 +747,8 @@ TileCell* Map::FindTileCellByMousePosition(int MouseX, int MouseY)
 			{
 				return GetTileCell(tilePosition);
 			}
-
-
-
 		}
 	}
-
 	return NULL;
 }
 
@@ -871,18 +756,18 @@ void Map::MoveLeft()
 {
 	_startX--;
 }
+
 void Map::MoveRight()
 {
 	_startX++;
-
 }
+
 void Map::MoveUp()
 {
 	_startY--;
-
 }
+
 void Map::MoveDown()
 {
 	_startY++;
-
 }

@@ -6,17 +6,16 @@
 PathfinderMonster::PathfinderMonster(std::wstring name)
 	:Monster(name)
 {
-
 }
+
 PathfinderMonster::~PathfinderMonster()
 {
-
 }
 
 void PathfinderMonster::Init(std::wstring textureFilename, std::wstring scriptFilename)
 {
 	Monster::Init(textureFilename, scriptFilename);
-
+	/*
 	// 위치를 고정
 	Map* map = (Map*)ComponentSystem::GetInstance()->FindCompoent(L"Map");
 	if (NULL != map)
@@ -27,8 +26,9 @@ void PathfinderMonster::Init(std::wstring textureFilename, std::wstring scriptFi
 		_tilePosition.y = map->GetHeight() / 2;
 		map->setTileComponent(_tilePosition, this);
 	}
+	*/
 }
+
 void PathfinderMonster::UpdateAI(float deltaTime)
 {
-
 }

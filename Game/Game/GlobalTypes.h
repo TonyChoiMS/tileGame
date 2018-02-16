@@ -13,7 +13,7 @@ typedef struct _TilePoint
 	int x;
 	int y;
 
-}TilePoint;
+} TilePoint;
 
 enum eDirection
 {

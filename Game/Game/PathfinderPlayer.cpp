@@ -1,19 +1,17 @@
 #include "Map.h"
 #include "State.h"
-#include "PathfindingIdeState.h"
+#include "PathfindingIdleState.h"
 #include "PathfinderPlayer.h"
 #include "ComponentSystem.h"
 #include "PathfindingState.h"
 #include "PathfindingMoveState.h"
 #include "PathfindingImmedateState.h"
-PathfinderPlayer::PathfinderPlayer(std::wstring name)
-	:Player(name)
+PathfinderPlayer::PathfinderPlayer(std::wstring name) : Player(name)
 {
-
 }
+
 PathfinderPlayer::~PathfinderPlayer()
 {
-
 }
 
 void PathfinderPlayer::Init(std::wstring textureFilename, std::wstring scriptFilename)
@@ -31,9 +29,9 @@ void PathfinderPlayer::Init(std::wstring textureFilename, std::wstring scriptFil
 	}
 	*/
 }
+
 void PathfinderPlayer::UpdateAI(float deltaTime)
 {
-
 }
 
 void PathfinderPlayer::InitState(std::wstring textureFilename, std::wstring scriptFilename)
@@ -42,7 +40,7 @@ void PathfinderPlayer::InitState(std::wstring textureFilename, std::wstring scri
 
 	// Idle 교체 , 새로운 상태(Pathfinding  추가)
 	{
-		State* state = new PathfindingIdeState(this);
+		State* state = new PathfindingIdleState(this);
 		state->CreateSprite(textureFilename, scriptFilename);
 		_stateMap[eStateType::ST_IDLE] = state;
 	}

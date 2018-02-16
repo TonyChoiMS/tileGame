@@ -7,39 +7,29 @@
 #include "IdleState.h"
 #include "AttackState.h"
 #include "DefenseState.h"
-#include "DieState.h"
+#include "DeadState.h"
 #include "TileCell.h"
-Character::Character(std::wstring name)
-	:Component(name)
+Character::Character(std::wstring name) : Component(name)
 {
+	_position.x = _position.y = 0.0f;
 
-	//_sprite = NULL;
-	//_x = _y = 0.0f;
-	//_isMoving = false;
-
-	//moveTime = 0.3f;
-	//_moveTime = (float)(rand() % 100 + 50) / 100.0f;
-	//_state->_moveTime = 0.3f;
-	//_state = new IdleState(this);
-
-	//_state = new IdleState(this);
 	_state = NULL;
 	_isMoving = false;
 	_moveTime = (float)(rand() % 100 + 50) / 100.0f;
 
-	_position.x = _position.y = 0.0f;
 	_currentDirection = eDirection::LEFT;
 	SetCanMove(false);
 
-	_hp = 30;
+	_hp = 100;
 	_attackPoint = 10;
 	_attackCoolTimeDuration = 0.0f;
-	_attackCoolTime = 3.0f;
+	_attackCoolTime = 1.0f;
 }
+
 Character::~Character()
 {
-
 }
+
 void Character::Init(std::wstring textureFilename, std::wstring scriptFilename)
 {
 	// 화면에 그려질 스프라이트 생성
@@ -84,11 +74,8 @@ void Character::Init(std::wstring textureFilename, std::wstring scriptFilename)
 	*/
 	// 타일인덱스를 통한 위치 세팅 테스트
 	{
-		//_tilePosition.x = 1;
-		//_tilePosition.y = 1;
-
 		// 픽셀 좌표
-		Map* map = (Map*)ComponentSystem::GetInstance()->FindCompoent(L"Map");
+		Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(L"Map");
 		if (NULL != map)
 		{
 			TilePoint tilePos;
@@ -100,10 +87,8 @@ void Character::Init(std::wstring textureFilename, std::wstring scriptFilename)
 				tilePos.y = rand() % map->GetHeight();
 			}
 			_tilePosition = tilePos;
-			/*_tilePosition.x = rand() % map->GetWidth();
-			_tilePosition.y = rand() % map->GetHeight();*/
+
 			map->setTileComponent(_tilePosition, this);
-			//_position = map->GetPosition(tileX, tileY);
 		}
 	}
 
@@ -117,58 +102,12 @@ void Character::Init(std::wstring textureFilename, std::wstring scriptFilename)
 		_font->SetText(text);
 	}
 
-
-	//StateMap 구성
-	// 크기를 몇인지 모르고 임의 접근을 할 수 없기 때문에 링크드,큐,스택 사용 불가
-	// 배열은 크기를 모르고 , 순서가 바뀌였을 때는 문제가 되기 때문에 사용 할 수 없다.
-	// Map 사용
-	/*
-	{
-	State* state = new IdleState(this);
-	state->CreateSprite(textureFilename, scriptFilename);
-	_stateMap[eStateType::ST_IDLE] = state;
-	}
-	{
-	State* state = new MoveState(this);
-	state->CreateSprite(textureFilename, scriptFilename);
-	_stateMap[eStateType::ST_MOVE] = state;
-	}
-	{
-	State* state = new AttackState(this);
-	state->CreateSprite(textureFilename, scriptFilename);
-	_stateMap[eStateType::ST_ATTACK] = state;
-	}
-	{
-	State* state = new DefenseState(this);
-	state->CreateSprite(textureFilename, scriptFilename);
-	_stateMap[eStateType::ST_DEFFENSE] = state;
-	}
-	{
-	State* state = new DieState(this);
-	state->CreateSprite(textureFilename, scriptFilename);
-	_stateMap[eStateType::ST_DIE] = state;
-	}
-	*/
 	InitState(textureFilename, scriptFilename);
-
 	ChangeState(eStateType::ST_IDLE);
 }
+
 void Character::Deinit()
 {
-	/*
-	if (NULL != _sprite)
-	{
-	delete _sprite;
-	_sprite = NULL;
-	}
-	*/
-	/*
-	if (NULL != _state)
-	{
-	delete _state;
-	_state = NULL;
-	}
-	*/
 	for (std::map<eStateType, State*>::iterator it = _stateMap.begin();
 		it != _stateMap.end(); it++)
 	{
@@ -182,24 +121,14 @@ void Character::Deinit()
 		delete _font;
 		_font = NULL;
 	}
-	/*
-	for(int i = 0; i < _spriteList.size(); i++)
-	{
-	delete _spriteList[i];
-	}
-	_spriteList.clear();
-	*/
 }
+
 void  Character::Update(float deltaTime)
 {
-	//_sprite->Update(deltaTime);
-
-	//_spriteList[_currentDirection]->Update(deltaTime);
-	//UpdateAI(deltaTime);
-	//UpdateMove(deltaTime);
 	_state->Update(deltaTime);
 	UpdateAttackCoolTime(deltaTime);
-	int coolTime = (int)(_attackCoolTimeDuration * 10000.0f);
+
+	int coolTime = (int)(_attackCoolTimeDuration * 1000.0f);
 	WCHAR text[100];
 	wsprintf(text, L"HP %d\n%d", _hp, coolTime);
 	_font->SetText(text);
@@ -213,7 +142,6 @@ void Character::Render()
 	//_spriteList[_currentDirection]->SetPosition(_position.x, _position.y);
 	//_spriteList[_currentDirection]->Render();
 	_state->Render();
-
 	_font->SetPosition(_position.x - 100, _position.y - 50);
 	_font->Render();
 }
@@ -248,24 +176,13 @@ void Character::ReceiveMsg(const sMessageParam& param)
 	{
 		_damagePoint = param.attackPoint;
 		_state->ChangeState(eStateType::ST_DEFFENSE);
-		/*
-		int attackPoint = param.attackPoint;
-		_hp -= attackPoint;
-		if (0 >_hp)
-		{
-		_isLive = false;
-		SetCanMove(true);
-		}
-		*/
 	}
 	if (L"RecoveryHP" == param.message)
 	{
 		//RecoverHp(param.recoveryHP);
 		_hp += param.recoveryHP;
 		if (100 < _hp)
-		{
 			_hp = 100;
-		}
 	}
 
 	if (L"AttakTrap" == param.message)
@@ -276,6 +193,10 @@ void Character::ReceiveMsg(const sMessageParam& param)
 }
 void Character::InitState(std::wstring textureFilename, std::wstring scriptFilename)
 {
+	//StateMap 구성
+	// 크기를 몇인지 모르고 임의 접근을 할 수 없기 때문에 링크드,큐,스택 사용 불가
+	// 배열은 크기를 모르고 , 순서가 바뀌였을 때는 문제가 되기 때문에 사용 할 수 없다.
+	// Map 사용
 	{
 		State* state = new IdleState(this);
 		state->CreateSprite(textureFilename, scriptFilename);
@@ -297,11 +218,12 @@ void Character::InitState(std::wstring textureFilename, std::wstring scriptFilen
 		_stateMap[eStateType::ST_DEFFENSE] = state;
 	}
 	{
-		State* state = new DieState(this);
+		State* state = new DeadState(this);
 		state->CreateSprite(textureFilename, scriptFilename);
 		_stateMap[eStateType::ST_DIE] = state;
 	}
 }
+
 void Character::ChangeState(eStateType stateType)
 {
 	// 기존 상태는 스톱
@@ -309,52 +231,12 @@ void Character::ChangeState(eStateType stateType)
 	{
 		_state->Stop();
 	}
-	// 타입에 맞춰서 새로운 상태로 교체
-	/*
-	switch (stateType)
-	{
-	case eStateType::ST_IDLE:
-	_state = new IdleState(this);
-	break;
-	case eStateType::ST_MOVE:
-	_state = new MoveState(this);
-	break;
-	default:
-	break;
-	}
-	*/
-	_state = _stateMap[stateType];
-
 
 	// 바뀐 상태를 스타트
+	_state = _stateMap[stateType];
 	_state->Start();
 }
-void Character::DecreaseHP(int damagePoint)
-{
-	_hp -= damagePoint;
 
-	if (_hp < 0)
-	{
-		_isLive = false;
-		_hp = 0;
-	}
-
-	/*
-	if (_hp < 0)
-	{
-	_state->ChangeState(eStateType::ST_DIE);
-	}
-	*/
-
-
-}
-/*
-void Character::IsDie()
-{
-_isLive = false;
-_hp = 0;
-}
-*/
 void Character::UpdateAI(float deltaTime)
 {
 
@@ -362,7 +244,7 @@ void Character::UpdateAI(float deltaTime)
 
 void Character::MoveStart(TilePoint newTilePosition)
 {
-	Map* map = (Map*)ComponentSystem::GetInstance()->FindCompoent(L"Map");
+	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(L"Map");
 	if (NULL != map)
 	{
 		map->ResetTileComponent(_tilePosition, this);
@@ -417,12 +299,13 @@ void Character::MoveStart(TilePoint newTilePosition)
 		}
 		*/
 	}
-
 }
+
 void Character::MoveStop()
 {
 	_isMoving = false;
 }
+
 std::vector<Component*> Character::Collision(std::vector<Component*> collisionList)
 {
 	/*
@@ -443,68 +326,58 @@ std::vector<Component*> Character::Collision(std::vector<Component*> collisionLi
 	return collisionList;
 }
 
-void Character::UpdateMove(float deltaTime)
+TileCell* Character::PopPathfindingCell()
 {
-	/*
-	if (false == _isLive)
-	{
-	return;
-	}
-	if (false == _isMoving)
-	{
-	return;
-	}
+	TileCell* tileCell = _pathfindingCellStack.top();
+	_pathfindingCellStack.pop();
+	return tileCell;
+}
 
-	if (_moveTime <= _state->GetMovingDuration())
-	{
-	_state->Stop();
-	}
-	else
-	{
-	_state->UpdateMove(deltaTime);
-	}
-	*/
+bool Character::IsEmptyPathfindingStack()
+{
+	if (0 != _pathfindingCellStack.size())
+		return false;
+	return true;
+}
+
+void Character::UpdateAttackCoolTime(float deltaTime)
+{
+	if (_attackCoolTimeDuration < _attackCoolTime)
+		_attackCoolTimeDuration += deltaTime;
 }
 
 bool Character::IsAttackCoolTime()
 {
 	if (_attackCoolTime <= _attackCoolTimeDuration)
-	{
 		return true;
-	}
 	return false;
 }
-
 
 void Character::ResetAttackCoolTime()
 {
 	_attackCoolTimeDuration = 0.0f;
 }
 
-void Character::UpdateAttackCoolTime(float deltaTime)
+void Character::DecreaseHP(int damagePoint)
 {
-	if (_attackCoolTimeDuration < _attackCoolTime)
+	_hp -= damagePoint;
+
+	if (_hp < 0)
 	{
-		_attackCoolTimeDuration += deltaTime;
+		_isLive = false;
+		_hp = 0;
 	}
 }
 
 void Character::EatItem()
 {
-	Map* map = (Map*)ComponentSystem::GetInstance()->FindCompoent(L"Map");
+	Map* map = (Map*)ComponentSystem::GetInstance()->FindComponent(L"Map");
 	if (NULL != map)
 	{
 		// 발 밑에 아이템이 있으면
 		Component* item = map->FindItemInTile(_tilePosition);
 		if (NULL != item)
 		{
-			/*
-			// 그 아이템을 사용
-			_hp = 100;
-			// 아이템 삭제
-			map->ResetTileComponent(_tilePosition, item);
-			item->SetLive(false);
-			*/
 			sMessageParam msg;
 			msg.sender = this;
 			msg.receiver = item;
@@ -514,24 +387,3 @@ void Character::EatItem()
 
 	}
 }
-
-void Character::PushPathfindingCell(TileCell* tileCell)
-{
-	_pathfindingCellStack.push(tileCell);
-}
-
-bool Character::IsEmptyPathfindingStack()
-{
-	if (0 != _pathfindingCellStack.size())
-	{
-		return false;
-	}
-	return true;
-}
-TileCell* Character::PopPathfindingCell()
-{
-	TileCell* tileCell = _pathfindingCellStack.top();
-	_pathfindingCellStack.pop();
-	return tileCell;
-}
-

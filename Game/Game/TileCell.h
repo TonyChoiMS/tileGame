@@ -61,6 +61,4 @@ public:
 public:
 	float GetDistanceFromStart() { return _distanceFromStart; }
 	void SetDistanceFromStart(float distanceFromStart) { _distanceFromStart = distanceFromStart; }
-
-
 };

@@ -136,7 +136,7 @@ public:
 protected:
 	std::stack<TileCell*> _pathfindingCellStack;
 public:
-	void PushPathfindingCell(TileCell* tileCell);
+	void PushPathfindingCell(TileCell* tileCell) { _pathfindingCellStack.push(tileCell); }
 	bool IsEmptyPathfindingStack();
 	TileCell* PopPathfindingCell();
 

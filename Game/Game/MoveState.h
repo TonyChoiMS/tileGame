@@ -2,28 +2,20 @@
 
 #include "State.h"
 
-
-class MoveState
-	: public State
+class MoveState : public State
 {
-private:
-	//Character* _character;
-
-private:
-	//bool _isMoving;
-	//float _moveTime;
-	float _movingDuration;
 public:
 	MoveState(Character* character);
 	~MoveState();
-public:
-	void Update(float deltaTime);
-	void UpdateMove(float deltaTime);
 
+private:
+	float _movingDuration;
+
+public:
 	void Start();
 	void Stop();
+	void Update(float deltaTime);
 
-	//void SetMoving(bool isMoving) { _isMoving = isMoving; }
-	//bool IsMoving() { return _isMoving; }
+	void UpdateMove(float deltaTime);
 	float GetMovingDuration() { return _movingDuration; }
 };

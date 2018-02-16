@@ -13,9 +13,9 @@ void State::Start()
 {
 	_nextState = eStateType::ST_NONE;
 }
+
 void State::Update(float deltaTime)
 {
-	//_spriteList[_currentDirection]->Update(deltaTime);
 	_spriteList[(int)_character->GetDirection()]->Update(deltaTime);
 }
 
@@ -24,6 +24,7 @@ void State::Render()
 	_spriteList[(int)_character->GetDirection()]->SetPosition(_character->GetPosition().x, _character->GetPosition().y);
 	_spriteList[(int)_character->GetDirection()]->Render();
 }
+
 void State::Release()
 {
 	for (int i = 0; i < _spriteList.size(); i++)
@@ -31,6 +32,7 @@ void State::Release()
 		_spriteList[i]->Release();
 	}
 }
+
 void State::Reset()
 {
 	for (int i = 0; i < _spriteList.size(); i++)

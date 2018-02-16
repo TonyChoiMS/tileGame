@@ -7,29 +7,30 @@ TileCell::TileCell()
 	//_sprite = NULL;
 	_position.x = _position.y = 0.0f;
 }
+
 TileCell::~TileCell()
 {
 }
-//void TileCell::Init(Sprite* sprite)
+
 void TileCell::Init(int tileX, int tileY)
 {
 	_tilePostion.x = tileX;
 	_tilePostion.y = tileY;
-	//_sprite = sprite;
 }
+
 void TileCell::Update(float deltaTime)
 {
 	//_sprite->Update(deltaTime);
 }
+
 void TileCell::Render()
 {
-	//_sprite->SetPosition(_position.x , _position.y);
-	//_sprite->Render();
 	for (std::list<Component*>::iterator it = _componentList.begin();
 		it != _componentList.end(); it++)
 	{
-		(*it)->SetPosition(_position);
-		(*it)->Render();
+		Component* component = (*it);
+		component->SetPosition(_position);
+		component->Render();
 	}
 }
 
@@ -37,6 +38,7 @@ void TileCell::Release()
 {
 	//_sprite->Release();
 }
+
 void TileCell::Reset()
 {
 	//_sprite->Reset();
@@ -46,6 +48,7 @@ void TileCell::SetPosition(Point position)
 {
 	_position = position;
 }
+
 void TileCell::AddComponent(Component* component)
 {
 	_componentList.push_back(component);
@@ -56,6 +59,7 @@ void TileCell::RemoveComponent(Component* component)
 {
 	_componentList.remove(component);
 }
+
 std::list<Component*>TileCell::GetCollisionList()
 {
 	std::list<Component*> collisionList;
